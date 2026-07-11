@@ -1,28 +1,178 @@
 /*
  * ML Optimize Pro — Admin Styles
- * Identidade visual ML (clean profissional B2B, padrao dos plugins ml-*).
- * Cor da marca: verde escuro (performance/otimizacao).
- * Prefix: mlopt-.
- *
- * Sem glassmorphism, sem gradient chamativo. Consistente com o
- * plugin base (ml-app-base-core) e ML Catalogo Pro.
+ * Padrao ML (replicado de ml-app-base-core, mlab-/mlcatp-, com cor da marca verde #0d7a3a).
+ * No external CSS libraries. No !important abuse.
  */
+
+/* Layout */
+.ml-optmize-pro-admin {
+	max-width: 1200px;
+}
+
+.ml-optmize-pro-admin h1 {
+	font-size: 1.6rem;
+	font-weight: 700;
+	margin-bottom: 1rem;
+	color: #1d2327;
+}
+
+/* Cards grid */
+.mlopt-cards {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(480px, 1fr));
+	gap: 1.25rem;
+	margin-top: 1.5rem;
+}
+
+.mlopt-card {
+	background: #fff;
+	border: 1px solid #dcdcde;
+	border-radius: 4px;
+	padding: 1.25rem 1.5rem;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.mlopt-card h2 {
+	font-size: 1rem;
+	font-weight: 600;
+	border-bottom: 1px solid #eee;
+	padding-bottom: 0.5rem;
+	margin-bottom: 0.75rem;
+	color: #1d2327;
+}
+
+/* Table */
+.mlopt-table {
+	width: 100%;
+	border-collapse: collapse;
+	font-size: 0.875rem;
+}
+
+.mlopt-table th,
+.mlopt-table td {
+	padding: 0.4rem 0.6rem;
+	text-align: left;
+	vertical-align: top;
+	border-bottom: 1px solid #f0f0f1;
+}
+
+.mlopt-table th {
+	font-weight: 600;
+	white-space: nowrap;
+	width: 180px;
+	color: #50575e;
+}
+
+.mlopt-table code {
+	background: #f6f7f7;
+	padding: 2px 6px;
+	border-radius: 3px;
+	font-size: 0.82rem;
+}
+
+/* Notice banners */
+.mlopt-notice {
+	padding: 0.75rem 1rem;
+	border-left: 4px solid #dba617;
+	background: #fff8e1;
+	border-radius: 2px;
+	margin-bottom: 0.75rem;
+	font-size: 0.875rem;
+}
+
+.mlopt-notice--warning {
+	border-color: #dba617;
+	background: #fff8e1;
+}
+
+.mlopt-notice--danger {
+	border-color: #cc1818;
+	background: #fdf2f2;
+}
+
+.mlopt-card ul {
+	list-style: disc;
+	padding-left: 1.25rem;
+	margin: 0;
+}
+
+.mlopt-card ul li {
+	font-size: 0.875rem;
+	margin-bottom: 0.35rem;
+	color: #3c434a;
+	line-height: 1.5;
+}
+
+/* Admin toolbar (padrao ML com brand-left) */
+.mlopt-admin-toolbar {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	margin: 14px 0 18px;
+	padding: 12px 14px;
+	background: #fff;
+	border: 1px solid #dcdcde;
+	border-left: 4px solid #0d7a3a;
+	box-shadow: 0 1px 2px rgba(0,0,0,.04);
+}
+
+.mlopt-admin-toolbar span {
+	color: #50575e;
+}
+
+.mlopt-admin-panel {
+	max-width: 920px;
+}
+
+.mlopt-list-card {
+	padding: 18px;
+}
+
+.mlopt-form-card {
+	max-width: 920px;
+}
+
+.mlopt-admin-table {
+	table-layout: auto;
+	width: 100%;
+	border-collapse: collapse;
+}
+
+.mlopt-admin-table th,
+.mlopt-admin-table td {
+	vertical-align: middle;
+}
+
+.mlopt-empty-state {
+	padding: 22px;
+	background: #f6f7f7;
+	border: 1px dashed #c3c4c7;
+	border-radius: 6px;
+	text-align: center;
+}
+
+
+/* === ML Plugin Base visual layer aplicado a ML Optimize Pro v1.0.5 === */
 
 :root {
 	--mlopt-brand:        #0d7a3a;
-	--mlopt-brand-dark:   #095c2a;
+	--mlopt-brand-dark:   #085e2c;
 	--mlopt-brand-soft:   #e7f4ec;
 	--mlopt-ink:          #102a43;
 	--mlopt-muted:        #52606d;
 	--mlopt-line:         #d9e2ec;
-	--mlopt-line-strong:  #b3c6cf;
+	--mlopt-line-strong:  #bfd6dc;
 	--mlopt-surface:      #fff;
 	--mlopt-shadow:       0 10px 28px rgba(13, 122, 58, 0.08);
 	--mlopt-shadow-soft:  0 8px 24px rgba(15, 23, 42, 0.05);
 	--mlopt-radius:       18px;
 }
 
-/* Container — fundo gradient sutil cinza-azul (padrao ML) */
+.toplevel_page_ml-optmize-pro,
+.ml-optmize-pro_page_ml-optmize-pro {
+	background: linear-gradient(180deg, #f7f8fa 0%, #eef2f5 100%);
+}
+
 .ml-optmize-pro-admin {
 	max-width: none;
 	width: calc(100% - 20px);
@@ -30,14 +180,9 @@
 	box-sizing: border-box;
 	color: var(--mlopt-ink);
 }
-.toplevel_page_ml-optmize-pro,
-.ml-optmize-pro_page_ml-optmize-pro,
-.toplevel_page_ml-optmize-pro & {
-	background: linear-gradient(180deg, #f7f8fa 0%, #eef2f5 100%);
-}
 
-/* === HERO (padrao ML) === */
-.mlopt-hero {
+/* === HERO (padrao ML, mlab-admin-hero/ mlcatp-hero) === */
+.mlopt-admin-hero {
 	display: flex;
 	align-items: flex-start;
 	justify-content: space-between;
@@ -50,13 +195,13 @@
 	background: var(--mlopt-surface);
 	box-shadow: var(--mlopt-shadow-soft);
 }
-.mlopt-hero-brand {
+.mlopt-admin-hero-brand {
 	display: flex;
 	align-items: flex-start;
 	gap: 18px;
 	min-width: 0;
 }
-.mlopt-hero-mark {
+.mlopt-admin-hero-mark {
 	display: grid;
 	place-items: center;
 	width: 88px;
@@ -68,26 +213,26 @@
 	color: var(--mlopt-brand);
 	box-shadow: 0 16px 30px rgba(13, 122, 58, 0.08);
 }
-.mlopt-hero-mark span {
+.mlopt-admin-hero-mark span {
 	font-size: 24px;
 	line-height: 1;
 	font-weight: 900;
 	letter-spacing: 0.08em;
 }
-.mlopt-hero-copy h1 {
+.mlopt-admin-hero-copy h1 {
 	margin: 0 0 10px;
 	color: var(--mlopt-ink);
 	font-size: 30px;
 	line-height: 1.15;
 }
-.mlopt-hero-intro {
+.mlopt-admin-intro {
 	max-width: 820px;
 	margin: 0;
 	color: var(--mlopt-muted);
 	font-size: 14px;
 	line-height: 1.6;
 }
-.mlopt-hero-eyebrow {
+.mlopt-admin-eyebrow {
 	display: inline-flex;
 	align-items: center;
 	margin-bottom: 8px;
@@ -97,7 +242,7 @@
 	letter-spacing: 0.12em;
 	text-transform: uppercase;
 }
-.mlopt-hero-meta {
+.mlopt-admin-hero-meta {
 	display: flex;
 	flex-direction: column;
 	align-items: flex-end;
@@ -115,150 +260,134 @@
 	font-weight: 800;
 }
 
-/* === TABS (pill shape, padrao ML) === */
-.mlopt-tabs {
+/* === TABS (pill shape, padrao ML, mlcatp-admin-tabs) === */
+.mlopt-admin-tabs {
 	display: flex;
 	flex-wrap: wrap;
 	gap: 8px;
 	margin: 0 0 18px;
 	padding: 8px;
 	border: 1px solid var(--mlopt-line);
-	border-radius: var(--mlopt-radius);
-	background: var(--mlopt-surface);
+	border-radius: 18px;
+	background: #fff;
 	box-shadow: var(--mlopt-shadow-soft);
 }
-.mlopt-tab {
+.mlopt-admin-tab {
 	display: inline-flex;
 	align-items: center;
-	gap: 6px;
+	justify-content: center;
 	min-height: 38px;
 	padding: 0 16px;
 	border: 1px solid var(--mlopt-line-strong);
 	border-radius: 999px;
-	background: var(--mlopt-surface);
+	background: #fff;
 	color: var(--mlopt-brand);
 	font-size: 13px;
 	font-weight: 800;
 	text-decoration: none;
 	white-space: nowrap;
-	transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
 }
-.mlopt-tab:hover {
-	background: var(--mlopt-brand-soft);
-	color: var(--mlopt-brand);
-}
-.mlopt-tab.is-active {
+.mlopt-admin-tab:hover,
+.mlopt-admin-tab.is-active {
 	background: var(--mlopt-brand);
 	border-color: var(--mlopt-brand);
 	color: #fff;
 }
-.mlopt-tab .dashicons {
+.mlopt-admin-tab .dashicons {
 	font-size: 16px;
 	width: 16px;
 	height: 16px;
 }
 
-/* === CARDS === */
-.mlopt-grid {
+/* === SUMMARY CARDS (padrao ML, mlcatp-summary-card) === */
+.mlopt-summary-grid {
 	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-	gap: 18px;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 16px;
+	margin-bottom: 18px;
 }
-.mlopt-card {
+.mlopt-summary-card {
+	position: relative;
 	padding: 22px;
 	border: 1px solid var(--mlopt-line);
+	border-top: 4px solid var(--mlopt-brand);
 	border-radius: var(--mlopt-radius);
 	background: var(--mlopt-surface);
 	box-shadow: var(--mlopt-shadow);
-	transition: box-shadow 0.18s ease, transform 0.18s ease;
 }
-.mlopt-card:hover {
-	box-shadow: 0 14px 36px rgba(15, 23, 42, 0.10);
-	transform: translateY(-1px);
+.mlopt-summary-card strong {
+	display: block;
+	color: var(--mlopt-ink);
+	font-size: 26px;
+	line-height: 1.2;
+	word-break: break-word;
+	margin: 8px 0 6px;
+}
+.mlopt-summary-label {
+	display: block;
+	font-size: 13px;
+	color: var(--mlopt-muted);
+	margin-bottom: 12px;
+}
+.mlopt-summary-card small,
+.mlopt-muted {
+	color: var(--mlopt-muted);
+}
+
+/* === CARDS GRID (padrao ML, mlcatp-grid/ mlab-cards) === */
+.mlopt-cards-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+	gap: 18px;
+	margin-top: 0;
 }
 .mlopt-card h2 {
 	margin: 0 0 8px;
 	color: var(--mlopt-ink);
 	font-size: 20px;
 	line-height: 1.3;
+	border: 0;
+	padding: 0;
+}
+.mlopt-card p {
+	color: #334155;
+	line-height: 1.55;
 }
 .mlopt-card .description {
 	color: var(--mlopt-muted);
 	font-size: 13px;
-	margin: 0 0 14px 0;
-}
-.mlopt-card-actions {
-	display: flex;
-	gap: 8px;
-	margin-bottom: 16px;
-	flex-wrap: wrap;
-}
-.mlopt-actions {
-	margin-top: 18px;
-	display: flex;
-	align-items: center;
-	gap: 12px;
-	flex-wrap: wrap;
 }
 
-/* === SCORE CARD === */
-.mlopt-score-card {
+/* === SCORE (visual simplificado, igual mlcatp-summary-card, sem SVG ring) === */
+.mlopt-score-display {
 	display: flex;
+	flex-direction: column;
 	align-items: center;
-	justify-content: center;
-	min-height: 240px;
+	gap: 8px;
+	padding: 18px 0;
 }
-.mlopt-score {
-	text-align: center;
-}
-.mlopt-score-ring {
-	position: relative;
-	width: 160px;
-	height: 160px;
-	margin: 0 auto 14px;
-}
-.mlopt-score-ring svg {
-	width: 100%;
-	height: 100%;
-	transform: rotate(-90deg);
-}
-.mlopt-score-ring circle {
-	fill: none;
-	stroke-width: 10;
-	stroke-linecap: round;
-}
-.mlopt-ring-bg {
-	stroke: var(--mlopt-line);
-}
-.mlopt-ring-fg {
-	stroke: var(--mlopt-brand);
-	stroke-dasharray: 326.7;
-	stroke-dashoffset: calc(326.7 - (326.7 * var(--p, 0) / 100));
-	transition: stroke-dashoffset 1.2s cubic-bezier(0.4, 0, 0.2, 1);
-}
-.mlopt-score-value {
-	position: absolute;
-	inset: 0;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	font-size: 38px;
-	font-weight: 800;
-	color: var(--mlopt-ink);
+.mlopt-score-value-big {
+	font-size: 56px;
+	font-weight: 900;
+	color: var(--mlopt-brand);
+	line-height: 1;
 	letter-spacing: -0.02em;
 }
-.mlopt-score-value span {
-	font-size: 18px;
+.mlopt-score-value-big span {
+	font-size: 24px;
 	color: var(--mlopt-muted);
 	font-weight: 700;
-	margin-left: 2px;
+	margin-left: 4px;
 }
-.mlopt-score-label {
+.mlopt-score-label-big {
 	font-size: 13px;
 	color: var(--mlopt-muted);
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+	font-weight: 700;
 }
 
-/* === MODULE PILLS === */
+/* === MODULE PILLS (padrao ML) === */
 .mlopt-modules-grid {
 	display: flex;
 	flex-wrap: wrap;
@@ -290,7 +419,7 @@
 	color: var(--mlopt-muted);
 }
 
-/* === SHORTCUTS (botoes) === */
+/* === SHORTCUTS === */
 .mlopt-shortcuts {
 	display: flex;
 	flex-wrap: wrap;
@@ -302,7 +431,7 @@
 	gap: 6px;
 }
 
-/* === STATS LIST === */
+/* === STATS === */
 .mlopt-stats {
 	list-style: none;
 	margin: 0;
@@ -334,7 +463,7 @@
 	letter-spacing: -0.01em;
 }
 
-/* === LOG LIST === */
+/* === LOG === */
 .mlopt-log-list {
 	list-style: none;
 	margin: 0;
@@ -386,12 +515,52 @@
 .mlopt-badge-warning { background: #fef3c7; color: #92400e; }
 .mlopt-badge-error   { background: #fee2e2; color: #991b1b; }
 
-/* === FORMS === */
-.mlopt-form {
-	padding: 0;
-	display: flex;
-	flex-direction: column;
-	gap: 18px;
+/* === FORMS (padrao ML) === */
+.ml-optmize-pro-admin .form-table {
+	margin-top: 14px;
+}
+.ml-optmize-pro-admin .form-table th {
+	width: 210px;
+	padding: 18px 14px 18px 0;
+	color: var(--mlopt-ink);
+	font-weight: 800;
+}
+.ml-optmize-pro-admin input[type="text"],
+.ml-optmize-pro-admin input[type="email"],
+.ml-optmize-pro-admin input[type="url"],
+.ml-optmize-pro-admin input[type="number"],
+.ml-optmize-pro-admin input[type="date"],
+.ml-optmize-pro-admin input[type="time"],
+.ml-optmize-pro-admin textarea,
+.ml-optmize-pro-admin select {
+	width: auto;
+	max-width: 100%;
+	padding: 10px 12px;
+	border: 1px solid var(--mlopt-line);
+	border-radius: 12px;
+	background: #fff;
+	color: var(--mlopt-ink);
+	box-shadow: none;
+}
+.ml-optmize-pro-admin .regular-text {
+	width: min(520px, 100%);
+}
+.ml-optmize-pro-admin .large-text {
+	width: 100%;
+}
+.ml-optmize-pro-admin textarea.regular-text {
+	width: min(680px, 100%);
+}
+.ml-optmize-pro-admin input:focus,
+.ml-optmize-pro-admin textarea:focus,
+.ml-optmize-pro-admin select:focus {
+	border-color: var(--mlopt-brand);
+	box-shadow: 0 0 0 2px rgba(13, 122, 58, 0.12);
+	outline: 0;
+}
+.mlopt-input {
+	width: 100%;
+	max-width: 520px;
 }
 .mlopt-field {
 	padding: 16px;
@@ -411,38 +580,8 @@
 	font-size: 12px;
 	color: var(--mlopt-muted);
 }
-.mlopt-input,
-.ml-optmize-pro-admin input[type="text"],
-.ml-optmize-pro-admin input[type="email"],
-.ml-optmize-pro-admin input[type="url"],
-.ml-optmize-pro-admin input[type="number"],
-.ml-optmize-pro-admin input[type="date"],
-.ml-optmize-pro-admin input[type="time"],
-.ml-optmize-pro-admin textarea,
-.ml-optmize-pro-admin select {
-	width: 100%;
-	max-width: 520px;
-	padding: 10px 12px;
-	border: 1px solid var(--mlopt-line);
-	border-radius: 12px;
-	background: var(--mlopt-surface);
-	color: var(--mlopt-ink);
-	font-size: 14px;
-	box-shadow: none;
-}
-.mlopt-input:focus,
-.ml-optmize-pro-admin input:focus,
-.ml-optmize-pro-admin textarea:focus,
-.ml-optmize-pro-admin select:focus {
-	border-color: var(--mlopt-brand);
-	outline: 0;
-	box-shadow: 0 0 0 2px rgba(13, 122, 58, 0.18);
-}
-.ml-optmize-pro-admin .regular-text { max-width: 520px; width: 100%; }
-.ml-optmize-pro-admin .large-text   { max-width: 100%; width: 100%; }
-.ml-optmize-pro-admin textarea       { min-height: 90px; }
 
-/* === TOGGLE (padrao ML, sem glass) === */
+/* === TOGGLE (padrao ML) === */
 .mlopt-field-toggle {
 	display: flex;
 	gap: 14px;
@@ -507,7 +646,7 @@
 	border: 1px solid var(--mlopt-brand);
 	border-radius: 999px;
 	background: var(--mlopt-brand);
-	color: #fff !important;
+	color: #fff;
 	font-weight: 800;
 	text-decoration: none;
 	box-shadow: var(--mlopt-shadow-soft);
@@ -520,19 +659,19 @@
 .mlopt-btn-save:hover {
 	background: var(--mlopt-brand-dark);
 	border-color: var(--mlopt-brand-dark);
-	color: #fff !important;
+	color: #fff;
 }
 .ml-optmize-pro-admin .button:not(.button-primary),
 .ml-optmize-pro-admin .button-secondary {
-	background: var(--mlopt-surface) !important;
-	color: var(--mlopt-brand) !important;
-	border-color: var(--mlopt-line-strong) !important;
+	background: #fff;
+	color: var(--mlopt-brand);
+	border-color: var(--mlopt-line-strong);
 }
 .ml-optmize-pro-admin .button:not(.button-primary):hover,
 .ml-optmize-pro-admin .button-secondary:hover {
-	background: var(--mlopt-brand-soft) !important;
-	color: var(--mlopt-brand) !important;
-	border-color: var(--mlopt-brand) !important;
+	background: var(--mlopt-brand-soft);
+	color: var(--mlopt-brand);
+	border-color: var(--mlopt-brand);
 }
 .ml-optmize-pro-admin .button.delete,
 .ml-optmize-pro-admin .submitdelete {
@@ -551,7 +690,35 @@
 	height: 16px;
 }
 
-/* === SCRIPT MANAGER RULES === */
+/* === WP LIST TABLE === */
+.ml-optmize-pro-admin .wp-list-table {
+	border: 1px solid var(--mlopt-line);
+	border-radius: 16px;
+	overflow: hidden;
+	box-shadow: var(--mlopt-shadow-soft);
+	border-collapse: separate;
+	border-spacing: 0;
+}
+.ml-optmize-pro-admin .wp-list-table thead th,
+.ml-optmize-pro-admin .widefat thead th {
+	background: #f8fafc;
+	color: var(--mlopt-ink);
+	font-weight: 800;
+	border-bottom: 1px solid var(--mlopt-line);
+}
+.ml-optmize-pro-admin .wp-list-table td,
+.ml-optmize-pro-admin .widefat td {
+	vertical-align: middle;
+	border-bottom: 1px solid #eef2f7;
+}
+.ml-optmize-pro-admin .notice.inline {
+	border-radius: 14px;
+	border-left-width: 5px;
+	margin: 14px 0;
+	padding: 8px 12px;
+}
+
+/* === SCRIPT RULES === */
 .mlopt-rules {
 	display: flex;
 	flex-direction: column;
@@ -573,68 +740,18 @@
 	font-size: 13px;
 	border: 1px solid var(--mlopt-line);
 	border-radius: 8px;
-	background: var(--mlopt-surface);
+	background: #fff;
 	color: var(--mlopt-ink);
 	width: 100%;
 }
-.mlopt-rule .mlopt-rule-full { grid-column: 1 / -1; }
+.mlopt-rule .mlopt-rule-full {
+	grid-column: 1 / -1;
+}
 .mlopt-rule .mlopt-rule-actions {
 	grid-column: 1 / -1;
 	display: flex;
 	justify-content: flex-end;
 	gap: 6px;
-}
-
-/* === WP LIST TABLE INTEGRATION === */
-.ml-optmize-pro-admin .wp-list-table {
-	border: 1px solid var(--mlopt-line);
-	border-radius: 16px;
-	overflow: hidden;
-	box-shadow: var(--mlopt-shadow-soft);
-	border-collapse: separate;
-	border-spacing: 0;
-}
-.ml-optmize-pro-admin .wp-list-table thead th,
-.ml-optmize-pro-admin .widefat thead th {
-	background: #f8fafc;
-	color: var(--mlopt-ink);
-	font-weight: 800;
-	border-bottom: 1px solid var(--mlopt-line);
-}
-.ml-optmize-pro-admin .wp-list-table td,
-.ml-optmize-pro-admin .widefat td {
-	vertical-align: middle;
-	border-bottom: 1px solid #eef2f7;
-}
-.ml-optmize-pro-admin .widefat.striped tbody tr:nth-child(odd) {
-	background: #fff;
-}
-
-/* === NOTICES === */
-.ml-optmize-pro-admin .notice.inline {
-	border-radius: 14px;
-	border-left-width: 5px;
-	margin: 14px 0;
-	padding: 8px 12px;
-}
-.mlopt-notice {
-	padding: 12px 14px;
-	border-left: 4px solid var(--mlopt-brand);
-	background: var(--mlopt-brand-soft);
-	border-radius: 12px;
-	margin-bottom: 12px;
-	font-size: 13px;
-	color: var(--mlopt-ink);
-}
-.mlopt-notice--warning {
-	border-left-color: #f59e0b;
-	background: #fff8e5;
-	color: #6a4b00;
-}
-.mlopt-notice--danger {
-	border-left-color: #d92d20;
-	background: #fff1f1;
-	color: #7a271a;
 }
 
 /* === SAVE STATUS === */
@@ -644,23 +761,84 @@
 	opacity: 0;
 	transition: opacity 0.2s ease;
 }
-.mlopt-save-status.is-visible { opacity: 1; }
-.mlopt-save-status.is-success { color: var(--mlopt-brand); font-weight: 700; }
-.mlopt-save-status.is-error   { color: #d92d20; font-weight: 700; }
+.mlopt-save-status.is-visible {
+	opacity: 1;
+}
+.mlopt-save-status.is-success {
+	color: var(--mlopt-brand);
+	font-weight: 700;
+}
+.mlopt-save-status.is-error {
+	color: #d92d20;
+	font-weight: 700;
+}
 
-/* === RESPONSIVE === */
+.mlopt-card-actions {
+	display: flex;
+	gap: 8px;
+	margin-bottom: 16px;
+	flex-wrap: wrap;
+}
+.mlopt-actions {
+	margin-top: 18px;
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	flex-wrap: wrap;
+}
+
+/* === RESPONSIVE (padrao ML) === */
 @media (max-width: 1100px) {
-	.mlopt-hero { flex-direction: column; }
-	.mlopt-hero-meta { align-items: flex-start; }
-	.mlopt-grid { grid-template-columns: 1fr; }
-	.mlopt-rule { grid-template-columns: 1fr; }
+	.mlopt-admin-hero {
+		display: grid;
+	}
+	.mlopt-admin-hero-meta {
+		align-items: flex-start;
+	}
+	.mlopt-summary-grid {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+	.mlopt-cards-grid {
+		grid-template-columns: 1fr;
+	}
+	.ml-optmize-pro-admin .form-table th {
+		width: auto;
+		display: block;
+		padding-bottom: 6px;
+	}
+	.ml-optmize-pro-admin .form-table td {
+		display: block;
+		padding-left: 0;
+	}
+	.mlopt-rule {
+		grid-template-columns: 1fr;
+	}
 }
 @media (max-width: 700px) {
-	.mlopt-hero { padding: 22px; }
-	.mlopt-hero-copy h1 { font-size: 24px; }
-	.mlopt-tab { width: 100%; }
+	.mlopt-summary-grid {
+		grid-template-columns: 1fr;
+	}
+	.mlopt-admin-hero {
+		padding: 22px;
+	}
+	.mlopt-admin-hero-copy h1 {
+		font-size: 26px;
+	}
+	.mlopt-admin-hero-brand {
+		display: grid;
+	}
+	.mlopt-admin-hero-mark {
+		width: 72px;
+		height: 72px;
+		flex-basis: 72px;
+	}
+	.mlopt-admin-tab {
+		width: 100%;
+	}
 }
 
 @media print {
-	.ml-optmize-pro-admin { display: none; }
+	.ml-optmize-pro-admin {
+		display: none;
+	}
 }

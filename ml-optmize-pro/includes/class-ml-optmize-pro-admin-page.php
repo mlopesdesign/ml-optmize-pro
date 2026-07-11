@@ -30,17 +30,13 @@ class ML_Optimize_Pro_Admin_Page {
 			<?php self::render_tabs( 'dashboard' ); ?>
 
 			<div class="mlopt-grid">
-				<div class="mlopt-card mlopt-score-card">
-					<div class="mlopt-score">
-						<div class="mlopt-score-ring" style="--p: <?php echo (int) $score['percentage']; ?>;">
-							<svg viewBox="0 0 120 120">
-								<circle cx="60" cy="60" r="52" class="mlopt-ring-bg"></circle>
-								<circle cx="60" cy="60" r="52" class="mlopt-ring-fg" style="--p: <?php echo (int) $score['percentage']; ?>;"></circle>
-							</svg>
-							<div class="mlopt-score-value"><?php echo (int) $score['percentage']; ?><span>%</span></div>
-						</div>
-						<div class="mlopt-score-label">Score estimado de otimizacao</div>
+				<div class="mlopt-card">
+					<h2>Score estimado</h2>
+					<div class="mlopt-score-display">
+						<div class="mlopt-score-value-big"><?php echo (int) $score['percentage']; ?><span>%</span></div>
+						<div class="mlopt-score-label-big">Otimizacao estimada</div>
 					</div>
+					<p class="description">Score calculado a partir dos modulos ativos e da configuracao atual.</p>
 				</div>
 
 				<div class="mlopt-card">
@@ -533,31 +529,24 @@ class ML_Optimize_Pro_Admin_Page {
 	/* ===================== HELPERS ===================== */
 
 	/**
-	 * Renderiza o header premium.
+	 * Renderiza o hero (padrao ML, replicado de mlab-admin-hero).
 	 *
 	 * @param string $title Titulo.
 	 * @param string $desc  Descricao.
 	 */
 	public static function render_header( $title, $desc ) {
 		?>
-		<div class="mlopt-header">
-			<div class="mlopt-header-inner">
-				<div class="mlopt-logo">
-					<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-						<defs>
-							<linearGradient id="mlopt-grad" x1="0" y1="0" x2="1" y2="1">
-								<stop offset="0%" stop-color="#7c3aed"/>
-								<stop offset="100%" stop-color="#06b6d4"/>
-							</linearGradient>
-						</defs>
-						<path d="M16 2 L4 18 H13 L11 30 L28 12 H19 L21 2 Z" fill="url(#mlopt-grad)"/>
-					</svg>
-				</div>
-				<div class="mlopt-header-text">
+		<div class="mlopt-admin-hero">
+			<div class="mlopt-admin-hero-brand">
+				<div class="mlopt-admin-hero-mark"><span>ML</span></div>
+				<div class="mlopt-admin-hero-copy">
+					<div class="mlopt-admin-eyebrow">ML Optimize Pro</div>
 					<h1><?php echo esc_html( $title ); ?></h1>
-					<p class="mlopt-header-desc"><?php echo esc_html( $desc ); ?></p>
+					<p class="mlopt-admin-intro"><?php echo esc_html( $desc ); ?></p>
 				</div>
-				<div class="mlopt-header-version">v<?php echo esc_html( ML_OPTIMIZE_PRO_VERSION ); ?></div>
+			</div>
+			<div class="mlopt-admin-hero-meta">
+				<div class="mlopt-version-badge">v<?php echo esc_html( ML_OPTIMIZE_PRO_VERSION ); ?></div>
 			</div>
 		</div>
 		<?php
@@ -585,10 +574,10 @@ class ML_Optimize_Pro_Admin_Page {
 			'logs'           => array( 'label' => 'Logs', 'icon' => 'dashicons-list-view' ),
 			'settings'       => array( 'label' => 'Settings', 'icon' => 'dashicons-admin-generic' ),
 		);
-		echo '<nav class="mlopt-tabs">';
+		echo '<nav class="mlopt-admin-tabs">';
 		foreach ( $tabs as $key => $tab ) {
 			$url = admin_url( 'admin.php?page=' . ML_Optimize_Pro_Admin::MENU_SLUG . '&tab=' . $key );
-			$class = 'mlopt-tab';
+			$class = 'mlopt-admin-tab';
 			if ( $key === $active ) {
 				$class .= ' is-active';
 			}

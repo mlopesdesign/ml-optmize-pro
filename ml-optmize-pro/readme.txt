@@ -4,7 +4,7 @@ Tags: performance, cache, optimization, core web vitals, speed, lazy load, cdn, 
 Requires at least: 6.0
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.0.4
+Stable tag: 1.0.5
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -141,6 +141,16 @@ Em ML Optimize Pro > Modulos, desligue o switch. Todas as otimizacoes sao granul
 == Changelog ==
 
 
+
+
+= 1.0.5 =
+* REVERT: identidade visual reescrita pra replicar 1:1 o padrao do plugin base `ml-app-base-core` (cores WP nativas + verde da marca `#0d7a3a`, sem glassmorphism, sem gradient roxo-ciano, sem SVG score ring de 160px, com hero `mlopt-admin-hero` + tabs `mlopt-admin-tabs` no formato `mlcatp-admin-tabs` + cards com border-radius 18px + botoes pill da cor da marca).
+* REVERT: `render_header()` reescrito (substitui SVG `<linearGradient roxo-ciano>` por `<div class="mlopt-admin-hero-mark"><span>ML</span></div>`, igual `mlab-admin-hero-mark`).
+* REVERT: `render_tabs()` renomeado de `mlopt-tabs`/`mlopt-tab` para `mlopt-admin-tabs`/`mlopt-admin-tab` (padrao `mlcatp-admin-tabs`).
+* REVERT: score ring SVG removido do dashboard, substituido por display simples padrao ML (`mlopt-score-display` + `mlopt-score-value-big`, igual `mlcatp-summary-card`).
+* REVERT: `wp_add_inline_style( $handle, critical_inline_css() )` removido do `enqueue_assets` (nao precisa mais com o CSS externo replicado 1:1 do base, sem cache de browser segurando CSS antigo).
+* REVERT: metodo `critical_inline_css()` removido do admin.php.
+* Mantido: enfileiramento sempre em `admin_enqueue_scripts` (sem filtro strpos), nome do objeto JS `mlopt` (consistente com `wp_localize_script`).
 
 = 1.0.4 =
 * HOTFIX: adicionado CSS inline critico via `wp_add_inline_style` no `enqueue_assets()`. Renderiza no `<head>` DEPOIS do `<link>` do arquivo externo, com `!important` e alta especificidade, sobrepondo QUALQUER cache (browser, plugin de cache WP, CDN). Garante a identidade visual ML mesmo se o arquivo CSS externo falhar ao carregar.
