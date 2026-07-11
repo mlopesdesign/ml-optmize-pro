@@ -108,37 +108,13 @@ class ML_Optimize_Pro_Admin_Page {
 	}
 
 	/**
-	 * Roteador de tabs — le $_GET['page'] e mapeia pra tab.
+	 * Roteador de tabs.
 	 */
 	public static function render_tab_router() {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_die( esc_html__( 'Permissao negada.', 'ml-optmize-pro' ) );
 		}
-		// Mapa page_slug -> tab_slug (slugs limpos, sem &).
-		$page_map = array(
-			'ml-optmize-pro'                => 'dashboard',
-			'ml-optmize-pro-cache'          => 'cache',
-			'ml-optmize-pro-files'          => 'files',
-			'ml-optmize-pro-lazy'           => 'lazy',
-			'ml-optmize-pro-script-manager' => 'script_manager',
-			'ml-optmize-pro-bloat'          => 'bloat',
-			'ml-optmize-pro-fonts'          => 'fonts',
-			'ml-optmize-pro-preload'        => 'preload',
-			'ml-optmize-pro-database'       => 'database',
-			'ml-optmize-pro-heartbeat'      => 'heartbeat',
-			'ml-optmize-pro-cdn'            => 'cdn',
-			'ml-optmize-pro-speculation'    => 'speculation',
-			'ml-optmize-pro-logs'           => 'logs',
-			'ml-optmize-pro-settings'       => 'settings',
-		);
-		$page = isset( $_GET['page'] ) ? sanitize_key( wp_unslash( $_GET['page'] ) ) : '';
-		if ( isset( $page_map[ $page ] ) ) {
-			$tab = $page_map[ $page ];
-		} elseif ( ! empty( $_GET['tab'] ) ) {
-			$tab = sanitize_key( wp_unslash( $_GET['tab'] ) );
-		} else {
-			$tab = 'dashboard';
-		}
+		$tab = isset( $_GET['tab'] ) ? sanitize_key( wp_unslash( $_GET['tab'] ) ) : 'cache';
 		$method = 'render_tab_' . $tab;
 		if ( method_exists( __CLASS__, $method ) ) {
 			call_user_func( array( __CLASS__, $method ) );
@@ -583,24 +559,24 @@ class ML_Optimize_Pro_Admin_Page {
 	 */
 	public static function render_tabs( $active ) {
 		$tabs = array(
-			'dashboard'      => array( 'label' => 'Performance Hub', 'icon' => 'dashicons-performance', 'page' => 'ml-optmize-pro' ),
-			'cache'          => array( 'label' => 'Cache', 'icon' => 'dashicons-update', 'page' => 'ml-optmize-pro-cache' ),
-			'files'          => array( 'label' => 'File Optimization', 'icon' => 'dashicons-media-code', 'page' => 'ml-optmize-pro-files' ),
-			'lazy'           => array( 'label' => 'Lazy Load', 'icon' => 'dashicons-images-alt2', 'page' => 'ml-optmize-pro-lazy' ),
-			'script_manager' => array( 'label' => 'Script Manager', 'icon' => 'dashicons-editor-code', 'page' => 'ml-optmize-pro-script-manager' ),
-			'bloat'          => array( 'label' => 'Bloat Remover', 'icon' => 'dashicons-dismiss', 'page' => 'ml-optmize-pro-bloat' ),
-			'fonts'          => array( 'label' => 'Fonts', 'icon' => 'dashicons-editor-textcolor', 'page' => 'ml-optmize-pro-fonts' ),
-			'preload'        => array( 'label' => 'Preload & Hints', 'icon' => 'dashicons-admin-site', 'page' => 'ml-optmize-pro-preload' ),
-			'database'       => array( 'label' => 'Database', 'icon' => 'dashicons-database', 'page' => 'ml-optmize-pro-database' ),
-			'heartbeat'      => array( 'label' => 'Heartbeat', 'icon' => 'dashicons-heart', 'page' => 'ml-optmize-pro-heartbeat' ),
-			'cdn'            => array( 'label' => 'CDN', 'icon' => 'dashicons-cloud', 'page' => 'ml-optmize-pro-cdn' ),
-			'speculation'    => array( 'label' => 'Speculation', 'icon' => 'dashicons-controls-forward', 'page' => 'ml-optmize-pro-speculation' ),
-			'logs'           => array( 'label' => 'Logs', 'icon' => 'dashicons-list-view', 'page' => 'ml-optmize-pro-logs' ),
-			'settings'       => array( 'label' => 'Settings', 'icon' => 'dashicons-admin-generic', 'page' => 'ml-optmize-pro-settings' ),
+			'dashboard'      => array( 'label' => 'Performance Hub', 'icon' => 'dashicons-performance' ),
+			'cache'          => array( 'label' => 'Cache', 'icon' => 'dashicons-update' ),
+			'files'          => array( 'label' => 'File Optimization', 'icon' => 'dashicons-media-code' ),
+			'lazy'           => array( 'label' => 'Lazy Load', 'icon' => 'dashicons-images-alt2' ),
+			'script_manager' => array( 'label' => 'Script Manager', 'icon' => 'dashicons-editor-code' ),
+			'bloat'          => array( 'label' => 'Bloat Remover', 'icon' => 'dashicons-dismiss' ),
+			'fonts'          => array( 'label' => 'Fonts', 'icon' => 'dashicons-editor-textcolor' ),
+			'preload'        => array( 'label' => 'Preload & Hints', 'icon' => 'dashicons-admin-site' ),
+			'database'       => array( 'label' => 'Database', 'icon' => 'dashicons-database' ),
+			'heartbeat'      => array( 'label' => 'Heartbeat', 'icon' => 'dashicons-heart' ),
+			'cdn'            => array( 'label' => 'CDN', 'icon' => 'dashicons-cloud' ),
+			'speculation'    => array( 'label' => 'Speculation', 'icon' => 'dashicons-controls-forward' ),
+			'logs'           => array( 'label' => 'Logs', 'icon' => 'dashicons-list-view' ),
+			'settings'       => array( 'label' => 'Settings', 'icon' => 'dashicons-admin-generic' ),
 		);
 		echo '<nav class="mlopt-admin-tabs">';
 		foreach ( $tabs as $key => $tab ) {
-			$url = admin_url( 'admin.php?page=' . $tab['page'] );
+			$url = admin_url( 'admin.php?page=' . ML_Optimize_Pro_Admin::MENU_SLUG . '&tab=' . $key );
 			$class = 'mlopt-admin-tab';
 			if ( $key === $active ) {
 				$class .= ' is-active';
