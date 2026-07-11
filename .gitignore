@@ -1,0 +1,18 @@
+# Build artifacts
+*.zip
+!ml-app-base-core-v1.0.0.zip
+!ml-optmize-pro-v*.zip
+.DS_Store
+__MACOSX/
+.vscode/
+.idea/
+node_modules/
+*.log
+*.bak
+*.tmp
+*.swp
+*.pyc
+
+# WordPress debug
+debug.log
+wp-config.php.bak
