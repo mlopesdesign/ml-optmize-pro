@@ -538,9 +538,9 @@ class ML_Optimize_Pro_Admin_Page {
 		?>
 		<div class="mlopt-admin-hero">
 			<div class="mlopt-admin-hero-brand">
-				<div class="mlopt-admin-hero-mark"><span>ML</span></div>
+				<div class="mlopt-admin-hero-mark"><img src="<?php echo esc_url( ML_OPTIMIZE_PRO_URL . 'assets/images/logo-wordpress.png' ); ?>" alt="ML Lopes Design"></div>
 				<div class="mlopt-admin-hero-copy">
-					<div class="mlopt-admin-eyebrow">ML Optimize Pro</div>
+					<div class="mlopt-admin-eyebrow">ML Lopes Design · Optimize Pro</div>
 					<h1><?php echo esc_html( $title ); ?></h1>
 					<p class="mlopt-admin-intro"><?php echo esc_html( $desc ); ?></p>
 				</div>

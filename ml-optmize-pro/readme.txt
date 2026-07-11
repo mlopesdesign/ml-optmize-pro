@@ -144,6 +144,14 @@ Em ML Optimize Pro > Modulos, desligue o switch. Todas as otimizacoes sao granul
 
 
 
+= 1.0.7 =
+* IDENTIDADE VISUAL OFICIAL: paleta trocada de verde #0d7a3a (eu inventei) para TEAL #155e6f (oficial do ml-plugin-base v1.1.1). Cor da marca, brand-dark, brand-soft, sombras, focus ring, gradiente do hero-mark e fundo da pagina admin (linear-gradient) agora batem 1:1 com o plugin base.
+* LOGO OFICIAL: adicionado `assets/images/logo-wordpress.png` (mesmo pin/marcador teal usado em TODOS os plugins ML). O hero agora mostra a logo real no lugar do placeholder `<span>ML</span>`. Caminho resolvido via `ML_OPTIMIZE_PRO_URL . 'assets/images/logo-wordpress.png'`.
+* EYEBROW OFICIAL: trocado de "ML Optimize Pro" para "ML Lopes Design · Optimize Pro" (padrao do ml-plugin-base v1.1.1, igual "ML Lopes Design · Plugin Base").
+* CSS do hero-mark: removido o `<span>ML</span>` styling, adicionado `overflow: hidden` + regras para `<img>` (display block, max-width 100%, max-height 88px, object-fit contain) - mesma logica do `.mlpb-hero-mark img` no plugin base.
+* SEM mudanca de slug, prefixo, classes, JS, hooks, options, comportamento, AJAX ou HTML estrutural (so o conteudo do hero-mark/eyebrow e a paleta CSS).
+* Backward compatible com 1.0.6.
+
 = 1.0.6 =
 * HOTFIX critico: adicionadas 3 classes CSS que faltavam no v1.0.5 e QUEBRARAM o layout. O HTML renderizado usava `.mlopt-grid` (cards do dashboard), `.mlopt-form` (forms das tabs) e `.mlopt-log-msg` (linhas de log), mas o CSS da v1.0.5 só tinha `.mlopt-cards-grid` (eu renomeei sem atualizar o HTML). Resultado: dashboard empilhado em vez de grid, forms sem estilo, e log bagunçado. v1.0.6 adiciona as 3 classes (`.mlopt-grid` compartilha CSS com `.mlopt-cards-grid`; `.mlopt-form` e `.mlopt-log-msg` adicionados diretamente).
 * SEM mudanca de identidade visual, JS, hooks, classes, options ou HTML estrutural.
