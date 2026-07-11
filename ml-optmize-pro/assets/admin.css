@@ -335,11 +335,26 @@
 }
 
 /* === CARDS GRID (padrao ML, mlcatp-grid/ mlab-cards) === */
+.mlopt-grid,
 .mlopt-cards-grid {
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
 	gap: 18px;
 	margin-top: 0;
+}
+
+/* === FORM (padrao ML) === */
+.mlopt-form {
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 18px;
+}
+
+/* === LOG (entry) === */
+.mlopt-log-msg {
+	flex: 1;
+	color: var(--mlopt-ink);
 }
 .mlopt-card h2 {
 	margin: 0 0 8px;

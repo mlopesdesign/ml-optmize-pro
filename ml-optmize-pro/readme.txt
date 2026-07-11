@@ -4,7 +4,7 @@ Tags: performance, cache, optimization, core web vitals, speed, lazy load, cdn, 
 Requires at least: 6.0
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.0.5
+Stable tag: 1.0.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -142,6 +142,15 @@ Em ML Optimize Pro > Modulos, desligue o switch. Todas as otimizacoes sao granul
 
 
 
+
+
+= 1.0.6 =
+* HOTFIX critico: adicionadas 3 classes CSS que faltavam no v1.0.5 e QUEBRARAM o layout. O HTML renderizado usava `.mlopt-grid` (cards do dashboard), `.mlopt-form` (forms das tabs) e `.mlopt-log-msg` (linhas de log), mas o CSS da v1.0.5 só tinha `.mlopt-cards-grid` (eu renomeei sem atualizar o HTML). Resultado: dashboard empilhado em vez de grid, forms sem estilo, e log bagunçado. v1.0.6 adiciona as 3 classes (`.mlopt-grid` compartilha CSS com `.mlopt-cards-grid`; `.mlopt-form` e `.mlopt-log-msg` adicionados diretamente).
+* SEM mudanca de identidade visual, JS, hooks, classes, options ou HTML estrutural.
+* SEM mudanca de slug, prefixo ou cor da marca.
+* Backward compatible com 1.0.5 (so adiciona 3 regras CSS).
+
+**IMPORTANTE pro user:** apos atualizar, faca HARD REFRESH no browser (Ctrl+F5) ou abra em janela anonima. O `?ver=1.0.6` ja quebra o cache de 1 ano do browser, mas se mesmo assim o layout nao aplicar, verifique o plugin de cache do WP (LiteSpeed, W3, WP Rocket) e limpe o cache de CSS.
 
 = 1.0.5 =
 * REVERT: identidade visual reescrita pra replicar 1:1 o padrao do plugin base `ml-app-base-core` (cores WP nativas + verde da marca `#0d7a3a`, sem glassmorphism, sem gradient roxo-ciano, sem SVG score ring de 160px, com hero `mlopt-admin-hero` + tabs `mlopt-admin-tabs` no formato `mlcatp-admin-tabs` + cards com border-radius 18px + botoes pill da cor da marca).
