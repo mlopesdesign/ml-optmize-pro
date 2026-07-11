@@ -144,6 +144,16 @@ Em ML Optimize Pro > Modulos, desligue o switch. Todas as otimizacoes sao granul
 
 
 
+= 1.0.8 =
+* MOTOR DAS TABS: refatoracao completa do sistema de submenus e roteamento de tabs.
+* O `register_menu()` usava `self::MENU_SLUG . '&tab=' . $slug` como `menu_slug` de cada `add_submenu_page`. Isso e INVALIDO no WP — o `&` faz o WP gerar URL malformado (`?page=ml-optmize-pro%26tab%3Dcache`), `$_GET['tab']` nunca e detectado, e o submenu cai no callback do parent (`render_dashboard`). Por isso clicar em "Cache", "File Optimization", etc na sidebar NAO navegava — sempre voltava pro dashboard.
+* CORRECAO: cada submenu agora tem slug LIMPO e unico (`ml-optmize-pro-cache`, `ml-optmize-pro-files`, `ml-optmize-pro-lazy`, `ml-optmize-pro-script-manager`, `ml-optmize-pro-bloat`, `ml-optmize-pro-fonts`, `ml-optmize-pro-preload`, `ml-optmize-pro-database`, `ml-optmize-pro-heartbeat`, `ml-optmize-pro-cdn`, `ml-optmize-pro-speculation`, `ml-optmize-pro-logs`, `ml-optmize-pro-settings`). O `MENU_SLUG` raiz (`ml-optmize-pro`) agora aponta direto pra `render_tab_router` (em vez de `render_dashboard`).
+* `render_tab_router()` totalmente reescrito: le `$_GET['page']` PRIMEIRO e mapeia pro tab correspondente via `$page_map`. Se nao encontrar, tenta `$_GET['tab']` (fallback de compatibilidade). Default: `dashboard`.
+* `render_tabs()` (nav de pills no topo) atualizado pra gerar URLs com `?page=ml-optmize-pro-{tab}` em vez de `?page=ml-optmize-pro&tab={tab}`.
+* REMOVIDO o `remove_submenu_page( self::MENU_SLUG, self::MENU_SLUG . '&tab=dashboard' )` — agora o dashboard e o `MENU_SLUG` raiz, nao precisa esconder duplicata.
+* RESULTADO: clicar em qualquer tab da sidebar (Cache, Files, Bloat, Database, Settings, etc) AGORA navega pra tab certa. Os botoes de atalho do dashboard (Purgar cache, Limpar banco agora, Checar update, Exportar config) tambem voltam a funcionar porque a pagina agora carrega o JS certo.
+* SEM mudanca de slug, prefixo CSS, cor, identidade visual, classes, JS, hooks, options ou HTML estrutural (so o sistema de roteamento de menu/tab).
+
 = 1.0.7 =
 * IDENTIDADE VISUAL OFICIAL: paleta trocada de verde #0d7a3a (eu inventei) para TEAL #155e6f (oficial do ml-plugin-base v1.1.1). Cor da marca, brand-dark, brand-soft, sombras, focus ring, gradiente do hero-mark e fundo da pagina admin (linear-gradient) agora batem 1:1 com o plugin base.
 * LOGO OFICIAL: adicionado `assets/images/logo-wordpress.png` (mesmo pin/marcador teal usado em TODOS os plugins ML). O hero agora mostra a logo real no lugar do placeholder `<span>ML</span>`. Caminho resolvido via `ML_OPTIMIZE_PRO_URL . 'assets/images/logo-wordpress.png'`.
