@@ -4,7 +4,7 @@ Tags: performance, cache, optimization, core web vitals, speed, lazy load, cdn, 
 Requires at least: 6.0
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.0.6
+Stable tag: 1.0.9
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -139,6 +139,12 @@ Em ML Optimize Pro > Modulos, desligue o switch. Todas as otimizacoes sao granul
 6. Database cleanup
 
 == Changelog ==
+
+= 1.0.9 =
+* ROLLBACK CRITICO: v1.0.8 introduziu um BUG FATAL que quebrava o site (white screen of death) ao clicar no menu raiz do plugin. O `register_menu()` em v1.0.8 apontava o parent menu para `render_tab_router`, e o router mapeava `'ml-optmize-pro' => 'dashboard'`, tentando chamar `render_tab_dashboard()`. Porem esse metodo NAO EXISTIA no codigo (so existia `render_dashboard()`, sem prefixo `tab_`). Resultado: `call_user_func(array(__CLASS__, 'render_tab_dashboard'))` disparava `Error: Call to undefined method ML_Optimize_Pro_Admin_Page::render_tab_dashboard()` no momento do clique, quebrando o admin inteiro.
+* DECISAO: rollback TOTAL pro codigo de v1.0.7 (que estava funcionando), versionado como 1.0.9. Nada de remendo em hotfix - a feature do motor de menu precisa ser refeita com calma, com testes, e idealmente com prova concreta do bug original (print + console + debug.log) antes de tentar de novo.
+* Stable tag corrigido para 1.0.9 (estava travado em 1.0.6 desde o lancamento, falha de versionamento minha).
+* Site volta a funcionar identico a v1.0.7. Se voce tem v1.0.8 instalado com o site quebrado: faca update para 1.0.9 (corrige o fatal error).
 
 
 
