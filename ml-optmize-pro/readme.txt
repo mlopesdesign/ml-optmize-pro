@@ -4,7 +4,7 @@ Tags: performance, cache, optimization, core web vitals, speed, lazy load, cdn, 
 Requires at least: 6.0
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.0.3
+Stable tag: 1.0.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -140,6 +140,11 @@ Em ML Optimize Pro > Modulos, desligue o switch. Todas as otimizacoes sao granul
 
 == Changelog ==
 
+
+
+= 1.0.4 =
+* HOTFIX: adicionado CSS inline critico via `wp_add_inline_style` no `enqueue_assets()`. Renderiza no `<head>` DEPOIS do `<link>` do arquivo externo, com `!important` e alta especificidade, sobrepondo QUALQUER cache (browser, plugin de cache WP, CDN). Garante a identidade visual ML mesmo se o arquivo CSS externo falhar ao carregar.
+* HOTFIX: regras criticas de container (gradient), hero (border-left verde 6px), tabs (pill), cards (shadow), score ring (160px), botoes (pill verde) agora duplicadas inline - defesa em profundidade contra cache de browser que prende CSS antigo por 1 ano.
 
 = 1.0.3 =
 * HOTFIX: removido filtro strpos no `enqueue_assets` que impedia o CSS admin de ser carregado. Agora o CSS e o JS sao enfileirados em qualquer pagina admin relacionada.
