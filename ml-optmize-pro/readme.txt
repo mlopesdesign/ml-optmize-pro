@@ -4,7 +4,7 @@ Tags: performance, cache, optimization, core web vitals, speed, lazy load, cdn, 
 Requires at least: 6.0
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.0.2
+Stable tag: 1.0.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -139,6 +139,11 @@ Em ML Optimize Pro > Modulos, desligue o switch. Todas as otimizacoes sao granul
 6. Database cleanup
 
 == Changelog ==
+
+
+= 1.0.3 =
+* HOTFIX: removido filtro strpos no `enqueue_assets` que impedia o CSS admin de ser carregado. Agora o CSS e o JS sao enfileirados em qualquer pagina admin relacionada.
+* HOTFIX: corrigido nome do objeto JS no `wp_localize_script` (era `mlopt`, o JS procurava por `MLOptPro` — quebrava todos os handlers AJAX). Agora consistente.
 
 = 1.0.2 =
 * IDENTIDADE VISUAL: admin UI reescrito seguindo o padrao visual dos plugins ML (ml-app-base-core, ML Catalogo Pro). Cor da marca verde escuro (#0d7a3a) com brand-soft #e7f4ec, hero com border-left 6px, cards com border-radius 18px e box-shadow suave, tabs pill, botoes pill. Removido glassmorphism e gradient roxo-ciano que nao combinavam com a identidade ML. Prefixo CSS renomeado de `mloptpro-` para `mlopt-` (padrao dos outros ML).

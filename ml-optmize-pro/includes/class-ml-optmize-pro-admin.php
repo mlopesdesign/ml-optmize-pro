@@ -104,23 +104,25 @@ class ML_Optimize_Pro_Admin {
 	 * @param string $hook Hook.
 	 */
 	public static function enqueue_assets( $hook ) {
-		if ( false === strpos( (string) $hook, self::MENU_SLUG ) ) {
-			return;
-		}
+		// Enfileira em QUALQUER pagina admin relacionada ao plugin
+		// (o filtro strpos estava bloqueando indevidamente o carregamento
+		// do CSS, deixando o admin sem identidade visual). Custo: ~13 KB
+		// em todas as paginas admin (irrelevante).
+		$global_handle = 'ml-optmize-pro-admin';
 		wp_enqueue_style(
-			'ml-optmize-pro-admin',
+			$global_handle,
 			ML_OPTIMIZE_PRO_URL . 'assets/admin.css',
 			array(),
 			ML_OPTIMIZE_PRO_VERSION
 		);
 		wp_enqueue_script(
-			'ml-optmize-pro-admin',
+			$global_handle,
 			ML_OPTIMIZE_PRO_URL . 'assets/admin.js',
 			array( 'jquery' ),
 			ML_OPTIMIZE_PRO_VERSION,
 			true
 		);
-		wp_localize_script( 'ml-optmize-pro-admin', 'mlopt', array(
+		wp_localize_script( $global_handle, 'mlopt', array(
 			'ajaxUrl'  => admin_url( 'admin-ajax.php' ),
 			'nonce'    => wp_create_nonce( self::NONCE_ACTION ),
 			'restUrl'  => rest_url( 'ml-optimize-pro/v1/' ),

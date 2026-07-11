@@ -4,14 +4,14 @@
    ========================================================================== */
 (function($){
 	'use strict';
-	if (typeof MLOptPro === 'undefined') return;
-	const strings = MLOptPro.strings || {};
+	if (typeof mlopt === 'undefined') return;
+	const strings = mlopt.strings || {};
 
 	// Helper: AJAX
 	function mloptAjax(action, data) {
-		return $.post(MLOptPro.ajaxUrl, Object.assign({
+		return $.post(mlopt.ajaxUrl, Object.assign({
 			action: action,
-			nonce: MLOptPro.nonce
+			nonce: mlopt.nonce
 		}, data || {}));
 	}
 
@@ -219,9 +219,9 @@
 		$(this).closest('.mlopt-rule').remove();
 	});
 
-	// Init rules from window.MLOptProRules
-	if (window.MLOptProRules && Array.isArray(window.MLOptProRules)) {
-		window.MLOptProRules.forEach(function(r, i){
+	// Init rules from window.mloptRules
+	if (window.mloptRules && Array.isArray(window.mloptRules)) {
+		window.mloptRules.forEach(function(r, i){
 			$rules.append(ruleTemplate(i, r));
 			const $r = $rules.children().last();
 			$r.find('[data-k="scope"]').val(r.scope || 'everywhere');
