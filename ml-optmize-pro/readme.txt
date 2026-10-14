@@ -4,7 +4,7 @@ Tags: performance, cache, optimization, core web vitals, speed, lazy load, cdn, 
 Requires at least: 6.0
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.0.9
+Stable tag: 1.0.10
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -139,6 +139,15 @@ Em ML Optimize Pro > Modulos, desligue o switch. Todas as otimizacoes sao granul
 6. Database cleanup
 
 == Changelog ==
+
+= 1.0.10 =
+* Atualizador: passa a ler o repositorio publico ml-optmize-pro-releases (so ZIPs); sites com o repo antigo salvo nas settings migram sozinhos.
+* Atualizador: usa apenas o asset exato ml-optmize-pro-vX.Y.Z.zip (sem fallback para qualquer ZIP).
+* Atualizador: registra no_update quando nao ha versao nova (controle de auto-update do WP aparece corretamente).
+* Icones do plugin na tela de atualizacoes e no modal de detalhes.
+* Header Update URI.
+* Botao "Checar update" do painel voltou a funcionar (antes dava erro 500).
+* Cache do updater respeita a janela de erro (15 min) e e limpo ao trocar de repositorio ou apos atualizar.
 
 = 1.0.9 =
 * ROLLBACK CRITICO: v1.0.8 introduziu um BUG FATAL que quebrava o site (white screen of death) ao clicar no menu raiz do plugin. O `register_menu()` em v1.0.8 apontava o parent menu para `render_tab_router`, e o router mapeava `'ml-optmize-pro' => 'dashboard'`, tentando chamar `render_tab_dashboard()`. Porem esse metodo NAO EXISTIA no codigo (so existia `render_dashboard()`, sem prefixo `tab_`). Resultado: `call_user_func(array(__CLASS__, 'render_tab_dashboard'))` disparava `Error: Call to undefined method ML_Optimize_Pro_Admin_Page::render_tab_dashboard()` no momento do clique, quebrando o admin inteiro.
