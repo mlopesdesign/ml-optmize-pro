@@ -3,7 +3,7 @@
  * Plugin Name:       ML Optimize Pro
  * Plugin URI:        https://mlopesdesign.com.br/plugins/ml-optmize-pro
  * Description:       Suite premium de otimizacao WordPress: cache de pagina, minify CSS/JS, defer/delay JavaScript, remove unused CSS, lazy load, lazy render, self-host Google Fonts, preload de recursos, Script Manager estilo Perfmatters, Bloat Remover, limpeza de banco, controle de heartbeat, CDN, Speculation Rules e Performance Hub com score CWV.
- * Version:           1.0.10
+ * Version:           1.0.11
  * Requires at least: 6.0
  * Requires PHP:      7.4
  * Tested up to:      6.8
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'ML_OPTIMIZE_PRO_VERSION',  '1.0.10' );
+define( 'ML_OPTIMIZE_PRO_VERSION',  '1.0.11' );
 define( 'ML_OPTIMIZE_PRO_FILE',     __FILE__ );
 define( 'ML_OPTIMIZE_PRO_PATH',     plugin_dir_path( __FILE__ ) );
 define( 'ML_OPTIMIZE_PRO_URL',      plugin_dir_url( __FILE__ ) );
@@ -83,6 +83,18 @@ foreach ( $ml_optimize_pro_includes as $ml_optimize_pro_file ) {
 
 register_activation_hook( __FILE__, array( 'ML_Optimize_Pro_Activator', 'activate' ) );
 register_deactivation_hook( __FILE__, array( 'ML_Optimize_Pro_Deactivator', 'deactivate' ) );
+
+// Atualizacoes nao passam pela ativacao: regrava o MU loader antigo em qualquer request
+// (painel, front, cron, WP-CLI). Custo: uma leitura de opcao autoload.
+add_action(
+	'init',
+	static function () {
+		if ( class_exists( 'ML_Optimize_Pro_Activator' ) ) {
+			ML_Optimize_Pro_Activator::maybe_heal_mu_loader();
+		}
+	},
+	1
+);
 
 /**
  * Singleton accessor for the main plugin.

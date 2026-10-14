@@ -17,6 +17,8 @@ global $wpdb;
 // 1. Remove opcoes principais e sub-opcoes conhecidas.
 $options = array(
 	'ml_optimize_pro_settings',
+	'ml_optimize_pro_mu_rev',
+	'ml_optimize_pro_bc_applied',
 	'ml_optimize_pro_script_rules',
 	'ml_optimize_pro_bloat_rules',
 	'ml_optimize_pro_lazy_render_selectors',
