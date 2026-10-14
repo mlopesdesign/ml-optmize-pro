@@ -4,7 +4,7 @@ Tags: performance, cache, optimization, core web vitals, speed, lazy load, cdn, 
 Requires at least: 6.0
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.0.10
+Stable tag: 1.0.11
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -139,6 +139,12 @@ Em ML Optimize Pro > Modulos, desligue o switch. Todas as otimizacoes sao granul
 6. Database cleanup
 
 == Changelog ==
+
+= 1.0.11 =
+* CORRECAO: o loader MU (wp-content/mu-plugins/ml-optmize-pro-mu.php) carregava o plugin mesmo DESATIVADO; agora so carrega quando o plugin esta ativo.
+* CORRECAO: o loader MU dava erro fatal no site inteiro se a pasta do plugin fosse removida ou movida; agora confere se o arquivo existe e monta o caminho com WP_PLUGIN_DIR.
+* Desativar o plugin remove o loader MU; ativar grava de novo. Sites existentes regravam o loader sozinhos no proximo acesso (painel, site ou cron); se o plugin estava desativado, o loader antigo e removido.
+* Desinstalar remove tambem a opcao ml_optimize_pro_bc_applied.
 
 = 1.0.10 =
 * Atualizador: passa a ler o repositorio publico ml-optmize-pro-releases (so ZIPs); sites com o repo antigo salvo nas settings migram sozinhos.
