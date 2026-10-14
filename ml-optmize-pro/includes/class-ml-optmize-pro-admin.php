@@ -408,6 +408,7 @@ class ML_Optimize_Pro_Admin {
 			wp_send_json_error( array( 'message' => 'forbidden' ), 403 );
 		}
 		ML_Optimize_Pro_Updater::clear_cache();
+		delete_site_transient( 'update_plugins' );
 		$release = ML_Optimize_Pro_Updater::fetch_remote();
 		if ( ! $release ) {
 			wp_send_json_error( array( 'message' => 'fetch_failed' ) );

@@ -149,7 +149,7 @@ class ML_Optimize_Pro_Settings {
 
 			// === UPDATER / GITHUB ===
 			'updater_github_user'     => 'mlopesdesign',
-			'updater_github_repo'     => 'ml-optmize-pro',
+			'updater_github_repo'     => 'ml-optmize-pro-releases',
 
 			// === META ===
 			'settings_version'        => ML_OPTIMIZE_PRO_VERSION,

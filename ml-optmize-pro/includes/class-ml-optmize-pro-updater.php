@@ -27,6 +27,7 @@ class ML_Optimize_Pro_Updater {
 		add_filter( 'pre_set_site_transient_update_plugins', array( __CLASS__, 'check_update' ), 20, 1 );
 		add_filter( 'plugins_api', array( __CLASS__, 'plugins_api' ), 20, 3 );
 		add_filter( 'upgrader_pre_download', array( __CLASS__, 'filter_download_url' ), 10, 3 );
+		add_action( 'upgrader_process_complete', array( __CLASS__, 'after_upgrade' ), 10, 2 );
 	}
 
 	/**
@@ -39,6 +40,11 @@ class ML_Optimize_Pro_Updater {
 		$repo = ML_Optimize_Pro_Settings::get( 'updater_github_repo', ML_OPTIMIZE_PRO_GITHUB_REPO );
 		$user = $user ? sanitize_text_field( $user ) : ML_OPTIMIZE_PRO_GITHUB_USER;
 		$repo = $repo ? sanitize_text_field( $repo ) : ML_OPTIMIZE_PRO_GITHUB_REPO;
+		// Migracao: o repositorio de codigo (ml-optmize-pro) passa a ser privado; as atualizacoes
+		// vem do repositorio publico de releases. Sites com o valor antigo salvo seguem o novo.
+		if ( 'ml-optmize-pro' === $repo ) {
+			$repo = ML_OPTIMIZE_PRO_GITHUB_REPO;
+		}
 		return sprintf( 'https://api.github.com/repos/%s/%s/releases/latest', $user, $repo );
 	}
 
@@ -47,12 +53,19 @@ class ML_Optimize_Pro_Updater {
 	 *
 	 * @return array|null Release data ou null em erro.
 	 */
-	private static function fetch_remote() {
+	public static function fetch_remote() {
+		$url    = self::api_url();
 		$cached = get_transient( self::CACHE_KEY_DATA );
-		if ( is_array( $cached ) && ! empty( $cached['tag_name'] ) ) {
-			return $cached;
+		// Cache vale so para a mesma URL (troca de repositorio invalida o cache antigo).
+		if ( is_array( $cached ) && isset( $cached['__url__'] ) && $cached['__url__'] === $url ) {
+			if ( ! empty( $cached['__error__'] ) ) {
+				return null; // Erro recente: respeita os 15 min antes de consultar de novo.
+			}
+			if ( ! empty( $cached['tag_name'] ) ) {
+				return $cached;
+			}
 		}
-		$response = wp_remote_get( self::api_url(), array(
+		$response = wp_remote_get( $url, array(
 			'timeout' => self::API_TIMEOUT,
 			'headers' => array(
 				'Accept'     => 'application/vnd.github+json',
@@ -60,22 +73,36 @@ class ML_Optimize_Pro_Updater {
 			),
 		) );
 		if ( is_wp_error( $response ) ) {
-			set_transient( self::CACHE_KEY_DATA, array( '__error__' => $response->get_error_message() ), self::CACHE_TTL_ERR );
+			set_transient( self::CACHE_KEY_DATA, array( '__error__' => $response->get_error_message(), '__url__' => $url ), self::CACHE_TTL_ERR );
 			return null;
 		}
 		$code = (int) wp_remote_retrieve_response_code( $response );
 		$body = wp_remote_retrieve_body( $response );
 		if ( 200 !== $code || empty( $body ) ) {
-			set_transient( self::CACHE_KEY_DATA, array( '__error__' => 'http_' . $code ), self::CACHE_TTL_ERR );
+			set_transient( self::CACHE_KEY_DATA, array( '__error__' => 'http_' . $code, '__url__' => $url ), self::CACHE_TTL_ERR );
 			return null;
 		}
 		$data = json_decode( $body, true );
 		if ( ! is_array( $data ) || empty( $data['tag_name'] ) ) {
-			set_transient( self::CACHE_KEY_DATA, array( '__error__' => 'invalid_payload' ), self::CACHE_TTL_ERR );
+			set_transient( self::CACHE_KEY_DATA, array( '__error__' => 'invalid_payload', '__url__' => $url ), self::CACHE_TTL_ERR );
 			return null;
 		}
+		$data['__url__'] = $url;
 		set_transient( self::CACHE_KEY_DATA, $data, self::CACHE_TTL_OK );
 		return $data;
+	}
+
+	/**
+	 * Limpa o cache depois que este plugin e atualizado.
+	 *
+	 * @param WP_Upgrader $upgrader   Upgrader.
+	 * @param array       $hook_extra Dados do upgrade.
+	 */
+	public static function after_upgrade( $upgrader, $hook_extra ) {
+		if ( is_array( $hook_extra ) && isset( $hook_extra['type'], $hook_extra['plugins'] ) && 'plugin' === $hook_extra['type']
+			&& in_array( ML_OPTIMIZE_PRO_BASENAME, (array) $hook_extra['plugins'], true ) ) {
+			self::clear_cache();
+		}
 	}
 
 	/**
@@ -104,22 +131,40 @@ class ML_Optimize_Pro_Updater {
 			return $transient;
 		}
 		$remote_version = ltrim( $release['tag_name'], 'v' );
-		if ( version_compare( $current, $remote_version, '>=' ) ) {
-			return $transient;
-		}
-		$package = self::find_plugin_zip( $release );
-		if ( ! $package ) {
-			return $transient;
-		}
-		$transient->response[ ML_OPTIMIZE_PRO_BASENAME ] = (object) array(
-			'slug'        => ML_OPTIMIZE_PRO_SLUG,
-			'plugin'      => ML_OPTIMIZE_PRO_BASENAME,
-			'new_version' => $remote_version,
-			'url'         => isset( $release['html_url'] ) ? esc_url_raw( $release['html_url'] ) : '',
-			'package'     => $package,
-			'tested'      => isset( $release['target_commitish'] ) ? $release['target_commitish'] : '',
-			'icons'       => array(),
+		$package        = self::find_plugin_zip( $release );
+		$item           = (object) array(
+			'id'            => ML_OPTIMIZE_PRO_BASENAME,
+			'slug'          => ML_OPTIMIZE_PRO_SLUG,
+			'plugin'        => ML_OPTIMIZE_PRO_BASENAME,
+			'new_version'   => $remote_version,
+			'url'           => isset( $release['html_url'] ) ? esc_url_raw( $release['html_url'] ) : '',
+			'package'       => $package ? $package : '',
+			'tested'        => '6.8',
+			'icons'         => self::icons(),
+			'banners'       => array(),
+			'banners_rtl'   => array(),
+			'compatibility' => new stdClass(),
 		);
+		if ( ! $package || version_compare( $current, $remote_version, '>=' ) ) {
+			// Sem versao nova (ou sem o ZIP oficial): registra em no_update.
+			$item->new_version = $current;
+			$item->package     = '';
+			if ( ! isset( $transient->no_update ) || ! is_array( $transient->no_update ) ) {
+				$transient->no_update = array();
+			}
+			$transient->no_update[ ML_OPTIMIZE_PRO_BASENAME ] = $item;
+			if ( isset( $transient->response[ ML_OPTIMIZE_PRO_BASENAME ] ) ) {
+				unset( $transient->response[ ML_OPTIMIZE_PRO_BASENAME ] );
+			}
+			return $transient;
+		}
+		if ( ! isset( $transient->response ) || ! is_array( $transient->response ) ) {
+			$transient->response = array();
+		}
+		$transient->response[ ML_OPTIMIZE_PRO_BASENAME ] = $item;
+		if ( isset( $transient->no_update[ ML_OPTIMIZE_PRO_BASENAME ] ) ) {
+			unset( $transient->no_update[ ML_OPTIMIZE_PRO_BASENAME ] );
+		}
 		set_transient( self::CACHE_KEY_VERSION, $remote_version, self::CACHE_TTL_OK );
 		return $transient;
 	}
@@ -156,6 +201,7 @@ class ML_Optimize_Pro_Updater {
 				'changelog'   => isset( $release['body'] ) ? wp_kses_post( $release['body'] ) : '',
 			),
 			'download_link'     => self::find_plugin_zip( $release ),
+			'icons'             => self::icons(),
 		);
 		return $api;
 	}
@@ -206,14 +252,21 @@ class ML_Optimize_Pro_Updater {
 				}
 			}
 		}
-		// 2. Fallback: qualquer asset com nome contendo o slug.
-		foreach ( $assets as $asset ) {
-			if ( isset( $asset['name'] ) && false !== strpos( $asset['name'], ML_OPTIMIZE_PRO_SLUG ) && false !== strpos( $asset['name'], '.zip' ) ) {
-				if ( ! empty( $asset['browser_download_url'] ) ) {
-					return esc_url_raw( $asset['browser_download_url'] );
-				}
-			}
-		}
+		// Sem fallback: "qualquer ZIP com o slug" podia instalar o arquivo de outra versao.
 		return null;
+	}
+
+	/**
+	 * Icones da tela de atualizacoes.
+	 *
+	 * @return array
+	 */
+	private static function icons() {
+		$base = ML_OPTIMIZE_PRO_URL . 'assets/images/';
+		return array(
+			'1x'      => $base . 'icon-128x128.png',
+			'2x'      => $base . 'icon-256x256.png',
+			'default' => $base . 'icon-256x256.png',
+		);
 	}
 }
