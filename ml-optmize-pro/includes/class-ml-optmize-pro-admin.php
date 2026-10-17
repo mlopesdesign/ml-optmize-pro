@@ -94,6 +94,15 @@ class ML_Optimize_Pro_Admin {
 				array( 'ML_Optimize_Pro_Admin_Page', 'render_tab_router' )
 			);
 		}
+		// Licença: página própria (não depende do roteamento das abas).
+		add_submenu_page(
+			self::MENU_SLUG,
+			__( 'Licença', 'ml-optmize-pro' ),
+			__( 'Licença', 'ml-optmize-pro' ),
+			'manage_options',
+			ML_Optimize_Pro_License::PAGE,
+			array( 'ML_Optimize_Pro_License', 'render_page' )
+		);
 		// Esconde o submenu duplicado (o primeiro e o dashboard, vamos usa-lo).
 		remove_submenu_page( self::MENU_SLUG, self::MENU_SLUG . '&tab=dashboard' );
 	}
@@ -156,6 +165,10 @@ class ML_Optimize_Pro_Admin {
 		$action = isset( $_POST['action'] ) ? sanitize_key( wp_unslash( $_POST['action'] ) ) : '';
 		// Resposta: redirect com flag.
 		$redirect = admin_url( 'admin.php?page=' . self::MENU_SLUG );
+		// Sem teste/licença: salvar configurações trava (o site continua otimizado).
+		if ( in_array( $action, array( 'save_general', 'save_script_rules' ), true ) ) {
+			ML_Optimize_Pro_License::guard_write();
+		}
 		if ( 'save_general' === $action ) {
 			// Salva chaves individuais vindas do form.
 			$keys = array(
@@ -215,6 +228,7 @@ class ML_Optimize_Pro_Admin {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_send_json_error( array( 'message' => 'forbidden' ), 403 );
 		}
+		ML_Optimize_Pro_License::guard_write( true );
 		$count = ML_Optimize_Pro_Cache::purge_all();
 		ML_Optimize_Pro_Logs::add( 'cache', sprintf( 'Cache purgado via AJAX: %d arquivos', $count ), 'info' );
 		wp_send_json_success( array( 'purged' => $count ) );
@@ -228,6 +242,7 @@ class ML_Optimize_Pro_Admin {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_send_json_error( array( 'message' => 'forbidden' ), 403 );
 		}
+		ML_Optimize_Pro_License::guard_write( true );
 		$stats = ML_Optimize_Pro_Database::run( 'manual' );
 		ML_Optimize_Pro_Logs::add( 'database', sprintf( 'Cleanup manual: %s', wp_json_encode( $stats ) ), 'success' );
 		update_option( 'ml_optimize_pro_last_cleanup', current_time( 'mysql' ), false );
@@ -242,6 +257,7 @@ class ML_Optimize_Pro_Admin {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_send_json_error( array( 'message' => 'forbidden' ), 403 );
 		}
+		ML_Optimize_Pro_License::guard_write( true );
 		$result = ML_Optimize_Pro_Browser_Cache::apply();
 		if ( is_wp_error( $result ) ) {
 			wp_send_json_error( array( 'message' => $result->get_error_message() ) );
@@ -257,6 +273,7 @@ class ML_Optimize_Pro_Admin {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_send_json_error( array( 'message' => 'forbidden' ), 403 );
 		}
+		ML_Optimize_Pro_License::guard_write( true );
 		ML_Optimize_Pro_Settings::reset();
 		ML_Optimize_Pro_Logs::add( 'settings', 'Settings resetados para defaults.', 'warning' );
 		wp_send_json_success();
@@ -281,6 +298,7 @@ class ML_Optimize_Pro_Admin {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_send_json_error( array( 'message' => 'forbidden' ), 403 );
 		}
+		ML_Optimize_Pro_License::guard_write( true );
 		$json = isset( $_POST['json'] ) ? wp_unslash( $_POST['json'] ) : '';
 		$result = ML_Optimize_Pro_Settings::import_json( $json );
 		if ( is_wp_error( $result ) ) {
@@ -297,6 +315,7 @@ class ML_Optimize_Pro_Admin {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_send_json_error( array( 'message' => 'forbidden' ), 403 );
 		}
+		ML_Optimize_Pro_License::guard_write( true );
 		$key   = isset( $_POST['key'] ) ? sanitize_key( wp_unslash( $_POST['key'] ) ) : '';
 		$value = isset( $_POST['value'] );
 		if ( ! $key ) {
@@ -320,6 +339,7 @@ class ML_Optimize_Pro_Admin {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_send_json_error( array( 'message' => 'forbidden' ), 403 );
 		}
+		ML_Optimize_Pro_License::guard_write( true );
 		$module  = isset( $_POST['module'] ) ? sanitize_key( wp_unslash( $_POST['module'] ) ) : '';
 		$payload = isset( $_POST['payload'] ) ? wp_unslash( $_POST['payload'] ) : '{}';
 		$payload = json_decode( $payload, true );
@@ -354,6 +374,7 @@ class ML_Optimize_Pro_Admin {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_send_json_error( array( 'message' => 'forbidden' ), 403 );
 		}
+		ML_Optimize_Pro_License::guard_write( true );
 		$rules = ML_Optimize_Pro_Script_Manager::get_rules();
 		$index = isset( $_POST['index'] ) ? (int) $_POST['index'] : -1;
 		$rule  = isset( $_POST['rule'] ) ? json_decode( wp_unslash( $_POST['rule'] ), true ) : null;
@@ -377,6 +398,7 @@ class ML_Optimize_Pro_Admin {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_send_json_error( array( 'message' => 'forbidden' ), 403 );
 		}
+		ML_Optimize_Pro_License::guard_write( true );
 		$rules = ML_Optimize_Pro_Script_Manager::get_rules();
 		$index = isset( $_POST['index'] ) ? (int) $_POST['index'] : -1;
 		if ( $index >= 0 && isset( $rules[ $index ] ) ) {
@@ -395,6 +417,7 @@ class ML_Optimize_Pro_Admin {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_send_json_error( array( 'message' => 'forbidden' ), 403 );
 		}
+		ML_Optimize_Pro_License::guard_write( true );
 		ML_Optimize_Pro_Logs::clear();
 		wp_send_json_success();
 	}

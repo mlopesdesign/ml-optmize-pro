@@ -69,6 +69,7 @@ class ML_Optimize_Pro_Core {
 			'speculation'       => 'ML_Optimize_Pro_Speculation_Rules',
 			'hub'               => 'ML_Optimize_Pro_Performance_Hub',
 			'rest'              => 'ML_Optimize_Pro_REST_API',
+			'license'           => 'ML_Optimize_Pro_License',
 			'admin'             => 'ML_Optimize_Pro_Admin',
 			'updater'           => 'ML_Optimize_Pro_Updater',
 		);

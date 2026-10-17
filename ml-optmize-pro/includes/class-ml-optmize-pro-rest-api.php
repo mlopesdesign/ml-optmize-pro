@@ -86,9 +86,14 @@ class ML_Optimize_Pro_REST_API {
 	/**
 	 * /cache/purge.
 	 *
-	 * @return WP_REST_Response
+	 * @return WP_REST_Response|WP_Error
 	 */
 	public static function handle_cache_purge() {
+		// Ação manual do painel: trava sem teste/licença (o purge automático continua).
+		$guard = ML_Optimize_Pro_License::rest_guard();
+		if ( is_wp_error( $guard ) ) {
+			return $guard;
+		}
 		$count = ML_Optimize_Pro_Cache::purge_all();
 		ML_Optimize_Pro_Logs::add( 'cache', sprintf( 'Cache purgado manualmente: %d arquivos', $count ), 'info' );
 		return rest_ensure_response( array(

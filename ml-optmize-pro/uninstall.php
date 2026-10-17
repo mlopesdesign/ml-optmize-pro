@@ -69,6 +69,8 @@ if ( is_dir( $cache_dir ) ) {
 wp_clear_scheduled_hook( 'ml_optimize_pro_preload_event' );
 wp_clear_scheduled_hook( 'ml_optimize_pro_db_cleanup_event' );
 wp_clear_scheduled_hook( 'ml_optimize_pro_logs_prune_event' );
+// Renovação diária da licença (a licença local fica guardada).
+wp_clear_scheduled_hook( 'mllc_ml_optmize_pro_refresh' );
 
 /**
  * Remove recursivamente um diretorio.
