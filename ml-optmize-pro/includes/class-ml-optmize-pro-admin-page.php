@@ -573,10 +573,11 @@ class ML_Optimize_Pro_Admin_Page {
 			'speculation'    => array( 'label' => 'Speculation', 'icon' => 'dashicons-controls-forward' ),
 			'logs'           => array( 'label' => 'Logs', 'icon' => 'dashicons-list-view' ),
 			'settings'       => array( 'label' => 'Settings', 'icon' => 'dashicons-admin-generic' ),
+			'license'        => array( 'label' => 'Licença', 'icon' => 'dashicons-admin-network' ),
 		);
 		echo '<nav class="mlopt-admin-tabs">';
 		foreach ( $tabs as $key => $tab ) {
-			$url = admin_url( 'admin.php?page=' . ML_Optimize_Pro_Admin::MENU_SLUG . '&tab=' . $key );
+			$url = 'license' === $key ? ML_Optimize_Pro_License::tab_url() : admin_url( 'admin.php?page=' . ML_Optimize_Pro_Admin::MENU_SLUG . '&tab=' . $key );
 			$class = 'mlopt-admin-tab';
 			if ( $key === $active ) {
 				$class .= ' is-active';

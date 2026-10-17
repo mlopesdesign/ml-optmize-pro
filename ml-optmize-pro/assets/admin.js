@@ -12,7 +12,13 @@
 		return $.post(mlopt.ajaxUrl, Object.assign({
 			action: action,
 			nonce: mlopt.nonce
-		}, data || {}));
+		}, data || {})).fail(function(xhr){
+			// Sem licença: o servidor recusa a gravação e explica o motivo.
+			const r = xhr && xhr.responseJSON;
+			if (r && r.data && r.data.locked && r.data.message) {
+				window.alert(r.data.message);
+			}
+		});
 	}
 
 	// Show save status

@@ -169,7 +169,8 @@
 }
 
 .toplevel_page_ml-optmize-pro,
-.ml-optmize-pro_page_ml-optmize-pro {
+.ml-optmize-pro_page_ml-optmize-pro,
+.ml-optimize-pro_page_ml-optmize-pro-license {
 	background: linear-gradient(180deg, #f3f7f8 0%, #eef4f6 100%);
 }
 
@@ -858,5 +859,54 @@
 @media print {
 	.ml-optmize-pro-admin {
 		display: none;
+	}
+}
+
+/* === LICENCA (1.1.0) === */
+.mlopt-notice--ok {
+	border-color: var(--mlopt-brand);
+	background: var(--mlopt-brand-soft);
+}
+.mlopt-license .mlopt-summary-card .mlopt-badge {
+	text-transform: none;
+	letter-spacing: 0;
+}
+.mlopt-license-form {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	margin: 14px 0 6px;
+}
+.mlopt-license-form p {
+	margin: 0;
+}
+.mlopt-license-actions {
+	margin-top: 12px;
+}
+.mlopt-license-actions form {
+	margin: 0;
+}
+.mlopt-license .button {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+}
+.mlopt-license .button .dashicons {
+	font-size: 16px;
+	width: 16px;
+	height: 16px;
+	line-height: 1;
+	margin: 0;
+}
+.mlopt-license-table td {
+	vertical-align: top;
+}
+.mlopt-license-table td:first-child {
+	white-space: nowrap;
+	width: 1%;
+}
+@media (max-width: 782px) {
+	.mlopt-license .mlopt-summary-grid {
+		grid-template-columns: 1fr;
 	}
 }

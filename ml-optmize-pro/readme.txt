@@ -4,7 +4,7 @@ Tags: performance, cache, optimization, core web vitals, speed, lazy load, cdn, 
 Requires at least: 6.0
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.0.11
+Stable tag: 1.1.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -140,6 +140,14 @@ Em ML Optimize Pro > Modulos, desligue o switch. Todas as otimizacoes sao granul
 
 == Changelog ==
 
+= 1.1.0 =
+* Licença: o plugin passa a usar a licença do site tools.mlopesdesign.com.br (ML License Hub). Aceita também a chave do Pacote Agência (vale em todos os plugins ML).
+* Nova tela "Licença" (menu ML Optimize Pro > Licença, também no fim da barra de abas): situação, plano, validade, ativar chave, começar teste grátis de 30 dias, conferir agora, remover deste site, links para comprar e para Minha conta.
+* Teste grátis de 30 dias por site. Quem atualiza recebe o teste sozinho na primeira visita ao painel — nada trava de surpresa.
+* Sem teste ou licença: o cache e toda a otimização continuam funcionando no site exatamente como estão (nada é desligado e nenhum dado é apagado). Só o painel fica bloqueado para salvar configurações e para as ações manuais (purgar cache, limpar banco, aplicar regras de cache do navegador, importar/resetar configurações, limpar logs, regras do Script Manager). Ver as telas e exportar a configuração continuam liberados.
+* A licença nunca é consultada durante a visita ao site: a conferência é feita no painel e uma vez por dia em segundo plano (cron). Sem internet, o site continua liberado por até 7 dias.
+* O loader MU (wp-content/mu-plugins/ml-optmize-pro-mu.php) não mudou.
+
 = 1.0.11 =
 * CORRECAO: o loader MU (wp-content/mu-plugins/ml-optmize-pro-mu.php) carregava o plugin mesmo DESATIVADO; agora so carrega quando o plugin esta ativo.
 * CORRECAO: o loader MU dava erro fatal no site inteiro se a pasta do plugin fosse removida ou movida; agora confere se o arquivo existe e monta o caminho com WP_PLUGIN_DIR.
@@ -209,6 +217,9 @@ Em ML Optimize Pro > Modulos, desligue o switch. Todas as otimizacoes sao granul
 * Lancamento inicial: cache de pagina, minify CSS/JS, defer/delay JS, remove unused CSS, lazy load, lazy render, script manager, bloat remover, self-host Google Fonts, preload, Speculation Rules, DB cleanup, heartbeat control, CDN rewrite, Performance Hub, auto-update via GitHub.
 
 == Upgrade Notice ==
+
+= 1.1.0 =
+Licença pelo site tools.mlopesdesign.com.br com teste grátis de 30 dias (começa sozinho no primeiro acesso ao painel). Sem licença, o cache e a otimização continuam funcionando; só salvar configurações e as ações do painel ficam bloqueadas.
 
 = 1.0.2 =
 Atualizacao visual. Toda a UI admin foi reescrita para seguir a identidade visual ML. Sem mudanca de comportamento — atualize por cima sem perder configuracoes.
