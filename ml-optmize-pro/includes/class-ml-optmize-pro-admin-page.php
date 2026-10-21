@@ -114,7 +114,11 @@ class ML_Optimize_Pro_Admin_Page {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_die( esc_html__( 'Permissao negada.', 'ml-optmize-pro' ) );
 		}
-		$tab = isset( $_GET['tab'] ) ? sanitize_key( wp_unslash( $_GET['tab'] ) ) : 'cache';
+		$tab = isset( $_GET['tab'] ) ? sanitize_key( wp_unslash( $_GET['tab'] ) ) : 'dashboard';
+		if ( 'dashboard' === $tab ) {
+			self::render_dashboard();
+			return;
+		}
 		$method = 'render_tab_' . $tab;
 		if ( method_exists( __CLASS__, $method ) ) {
 			call_user_func( array( __CLASS__, $method ) );

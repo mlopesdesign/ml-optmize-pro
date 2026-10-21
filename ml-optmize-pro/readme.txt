@@ -4,7 +4,7 @@ Tags: performance, cache, optimization, core web vitals, speed, lazy load, cdn, 
 Requires at least: 6.0
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.1.1
+Stable tag: 1.1.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -139,6 +139,15 @@ Em ML Optimize Pro > Modulos, desligue o switch. Todas as otimizacoes sao granul
 6. Database cleanup
 
 == Changelog ==
+
+= 1.1.2 =
+* Corrigido (crítico): "Minify CSS" removia da página todos os arquivos CSS locais (inclusive os do tema) sem colocar nada no lugar — o site perdia o layout. Sem "Combinar CSS" os links agora ficam intactos.
+* Corrigido (crítico): "Minify HTML" apagava todos os blocos <script>, <style>, <pre> e <textarea> da página. O marcador interno deixou de ser removido junto com os comentários.
+* Corrigido: o plugin nunca altera CSS ou JS do tema ativo (pai ou filho). Ao combinar, nada é removido sem antes confirmar que o arquivo combinado foi gravado com conteúdo; o combinado entra no lugar do primeiro arquivo, mantendo a ordem.
+* Alterado: minificar/combinar HTML, CSS e JS, adiar JS, remover dashicons/jQuery Migrate e combinar Google Fonts passam a vir desligados em instalações novas (são opções, não padrão).
+* Alterado: a limpeza automática do banco (apagar lixeira, revisões e rascunhos) passa a vir desligada em instalações novas. Ela apaga definitivamente conteúdo da lixeira de qualquer plugin — só roda se o administrador ligar.
+* Corrigido: as abas do painel (Cache, File Optimization, Lazy Load…) abriam sempre o Performance Hub.
+* Na atualização, o cache de páginas e os CSS/JS combinados gerados pelas versões anteriores são apagados uma vez, para serem gerados de novo corretamente.
 
 = 1.1.1 =
 * Corrigido (crítico): com o plugin ativo sozinho (sem outro plugin ML que carregasse o cliente de licença antes), o site inteiro caía com erro fatal "Class ML_License_Client_V2 not found". O cliente de licença agora é carregado sempre. Nenhuma mudança de comportamento.

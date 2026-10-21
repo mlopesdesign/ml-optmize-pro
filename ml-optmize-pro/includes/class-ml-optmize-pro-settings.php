@@ -50,15 +50,15 @@ class ML_Optimize_Pro_Settings {
 			'browser_cache_expiry'    => 365 * DAY_IN_SECONDS,
 
 			// === ASSETS / FILE OPTIMIZATION ===
-			'minify_html'             => 1,
-			'minify_css'              => 1,
-			'minify_js'               => 1,
+			'minify_html'             => 0,
+			'minify_css'              => 0,
+			'minify_js'               => 0,
 			'combine_css'             => 0,
 			'combine_js'              => 0,
 			'remove_unused_css'       => 0,
 			'unused_css_method'       => 'async', // async | remove
 			'unused_css_safelist'     => '',
-			'defer_js'                => 1,
+			'defer_js'                => 0,
 			'delay_js'                => 0,
 			'delay_js_exclusions'     => '',
 			'load_css_async'          => 0,
@@ -84,8 +84,8 @@ class ML_Optimize_Pro_Settings {
 			// === BLOAT REMOVER ===
 			'bloat_emojis'            => 1,
 			'bloat_embeds'            => 1,
-			'bloat_dashicons'         => 1,
-			'bloat_jquery_migrate'   => 1,
+			'bloat_dashicons'         => 0,
+			'bloat_jquery_migrate'   => 0,
 			'bloat_xmlrpc'            => 1,
 			'bloat_query_strings'     => 1,
 			'bloat_wp_version'        => 1,
@@ -102,7 +102,7 @@ class ML_Optimize_Pro_Settings {
 
 			// === FONTS ===
 			'fonts_self_host'         => 1,
-			'fonts_combine'           => 1,
+			'fonts_combine'           => 0,
 			'fonts_preload'           => 1,
 			'fonts_display_swap'      => 1,
 			'fonts_system_first'      => 0,
@@ -126,11 +126,11 @@ class ML_Optimize_Pro_Settings {
 			'images_avif_webp'        => 1,
 
 			// === DATABASE ===
-			'db_cleanup_enabled'      => 1,
+			'db_cleanup_enabled'      => 0,
 			'db_cleanup_schedule'     => 'weekly',
-			'db_cleanup_revisions'    => 1,
-			'db_cleanup_autodrafts'   => 1,
-			'db_cleanup_trash'        => 1,
+			'db_cleanup_revisions'    => 0,
+			'db_cleanup_autodrafts'   => 0,
+			'db_cleanup_trash'        => 0,
 			'db_cleanup_spam'         => 1,
 			'db_cleanup_transients'   => 1,
 			'db_cleanup_optimize'     => 0,
