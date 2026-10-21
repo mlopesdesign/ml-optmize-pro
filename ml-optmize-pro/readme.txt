@@ -4,7 +4,7 @@ Tags: performance, cache, optimization, core web vitals, speed, lazy load, cdn, 
 Requires at least: 6.0
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.1.0
+Stable tag: 1.1.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -139,6 +139,9 @@ Em ML Optimize Pro > Modulos, desligue o switch. Todas as otimizacoes sao granul
 6. Database cleanup
 
 == Changelog ==
+
+= 1.1.1 =
+* Corrigido (crítico): com o plugin ativo sozinho (sem outro plugin ML que carregasse o cliente de licença antes), o site inteiro caía com erro fatal "Class ML_License_Client_V2 not found". O cliente de licença agora é carregado sempre. Nenhuma mudança de comportamento.
 
 = 1.1.0 =
 * Licença: o plugin passa a usar a licença do site tools.mlopesdesign.com.br (ML License Hub). Aceita também a chave do Pacote Agência (vale em todos os plugins ML).
