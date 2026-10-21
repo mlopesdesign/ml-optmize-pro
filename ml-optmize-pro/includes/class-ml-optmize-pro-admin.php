@@ -64,7 +64,9 @@ class ML_Optimize_Pro_Admin {
 			esc_html__( 'ML Optimize Pro', 'ml-optmize-pro' ),
 			'manage_options',
 			self::MENU_SLUG,
-			array( 'ML_Optimize_Pro_Admin_Page', 'render_dashboard' ),
+			// O WordPress resolve admin.php?page=ml-optmize-pro&tab=X por "page"; o roteador
+			// lê "tab" e abre a aba certa (antes toda aba caía no Performance Hub).
+			array( 'ML_Optimize_Pro_Admin_Page', 'render_tab_router' ),
 			'data:image/svg+xml;base64,' . base64_encode( '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="#a7aaad"><path d="M11 2L4 11h5l-1 7 7-9h-5l1-7z"/></svg>' ),
 			59
 		);

@@ -124,6 +124,11 @@ class ML_Optimize_Pro_Assets {
 		}
 		$minify = ML_Optimize_Pro_Settings::is_on( 'minify_css' );
 		$combine = ML_Optimize_Pro_Settings::is_on( 'combine_css' );
+		// Sem combinar não há arquivo substituto: os links ficam intactos. (Antes, "Minify CSS"
+		// sozinho removia todos os CSS locais da página — o site perdia o layout.)
+		if ( ! $combine ) {
+			return $html;
+		}
 		// Encontra todos os <link rel="stylesheet" href="...">.
 		$pattern = '/<link\s+[^>]*rel=["\']stylesheet["\'][^>]*>/i';
 		if ( ! preg_match_all( $pattern, $html, $matches, PREG_SET_ORDER ) ) {
@@ -147,6 +152,10 @@ class ML_Optimize_Pro_Assets {
 			if ( ! self::is_local_url( $url ) ) {
 				continue;
 			}
+			// Nunca mexe no CSS do tema (regra ML: plugin não altera o template).
+			if ( self::is_theme_asset( $url ) ) {
+				continue;
+			}
 			$to_remove[] = $link;
 			if ( $combine ) {
 				$urls[] = $url;
@@ -155,26 +164,24 @@ class ML_Optimize_Pro_Assets {
 		if ( empty( $to_remove ) ) {
 			return $html;
 		}
-		// Remove os links originais.
-		$html = str_replace( $to_remove, '', $html );
-		// Combine.
-		if ( $combine && ! empty( $urls ) ) {
-			$hash = md5( implode( '|', $urls ) );
-			$cache = WP_CONTENT_DIR . '/cache/' . self::CACHE_DIR . '/' . self::CSS_DIR . '/' . $hash . '.css';
-			if ( ! file_exists( $cache ) ) {
-				$body = self::fetch_and_combine( $urls, 'css' );
-				@wp_mkdir_p( dirname( $cache ) );
-				@file_put_contents( $cache, $body );
-			}
-			$combined_url = WP_CONTENT_URL . '/cache/' . self::CACHE_DIR . '/' . self::CSS_DIR . '/' . $hash . '.css';
-			$combined_tag = '<link rel="stylesheet" id="ml-optpro-combined-' . esc_attr( $hash ) . '" href="' . esc_url( $combined_url ) . '" media="all" data-no-optimize="1" />';
-			// Insere no <head>, logo apos <head>.
-			$html = preg_replace( '/(<head[^>]*>)/i', '$1' . $combined_tag, $html, 1 );
-		} elseif ( $minify ) {
-			// Sem combine mas com minify: nao tem como minificar arquivos externos via buffer
-			// (isso eh trabalho do Cache + Cloudflare). Mantemos no-op.
+		$hash  = md5( implode( '|', $urls ) );
+		$cache = WP_CONTENT_DIR . '/cache/' . self::CACHE_DIR . '/' . self::CSS_DIR . '/' . $hash . '.css';
+		if ( ! self::ensure_combined_file( $cache, $urls, 'css' ) ) {
+			// Sem arquivo combinado válido, nada é removido: a página continua com seus CSS.
+			return $html;
 		}
-		return $html;
+		$combined_url = WP_CONTENT_URL . '/cache/' . self::CACHE_DIR . '/' . self::CSS_DIR . '/' . $hash . '.css';
+		$combined_tag = '<link rel="stylesheet" id="ml-optpro-combined-' . esc_attr( $hash ) . '" href="' . esc_url( $combined_url ) . '" media="all" data-no-optimize="1" />';
+		// O combinado entra no lugar do primeiro link removido (mantém a ordem da cascata)
+		// e os demais saem. Se a troca falhar, devolve o HTML original intacto.
+		$first = array_shift( $to_remove );
+		$pos   = strpos( $html, $first );
+		if ( false === $pos ) {
+			return $html;
+		}
+		$out = substr_replace( $html, $combined_tag, $pos, strlen( $first ) );
+		$out = str_replace( $to_remove, '', $out );
+		return false !== strpos( $out, $combined_tag ) ? $out : $html;
 	}
 
 	/**
@@ -207,6 +214,10 @@ class ML_Optimize_Pro_Assets {
 			if ( ! self::is_local_url( $url ) ) {
 				continue;
 			}
+			// Nunca mexe no JS do tema (regra ML: plugin não altera o template).
+			if ( self::is_theme_asset( $url ) ) {
+				continue;
+			}
 			// Pula scripts com type=module, defer/async, json, ld+json.
 			if ( preg_match( '/type=["\']module["\']/i', $full ) ) {
 				continue;
@@ -220,18 +231,19 @@ class ML_Optimize_Pro_Assets {
 		if ( empty( $to_remove ) ) {
 			return $html;
 		}
-		$html = str_replace( $to_remove, '', $html );
 		$hash  = md5( implode( '|', $urls ) );
 		$cache = WP_CONTENT_DIR . '/cache/' . self::CACHE_DIR . '/' . self::JS_DIR . '/' . $hash . '.js';
-		if ( ! file_exists( $cache ) ) {
-			$body = self::fetch_and_combine( $urls, 'js' );
-			@wp_mkdir_p( dirname( $cache ) );
-			@file_put_contents( $cache, $body );
+		if ( ! self::ensure_combined_file( $cache, $urls, 'js' ) ) {
+			// Sem arquivo combinado válido, nada é removido.
+			return $html;
 		}
 		$combined_url = WP_CONTENT_URL . '/cache/' . self::CACHE_DIR . '/' . self::JS_DIR . '/' . $hash . '.js';
 		$combined_tag = '<script id="ml-optpro-combined-' . esc_attr( $hash ) . '" src="' . esc_url( $combined_url ) . '" defer data-no-optimize="1"></script>';
-		$html = preg_replace( '/(<\/head>)/i', $combined_tag . '$1', $html, 1 );
-		return $html;
+		$out = preg_replace( '/(<\/head>)/i', $combined_tag . '$1', $html, 1 );
+		if ( ! is_string( $out ) || false === strpos( $out, $combined_tag ) ) {
+			return $html;
+		}
+		return str_replace( $to_remove, '', $out );
 	}
 
 	/**
@@ -319,7 +331,9 @@ class ML_Optimize_Pro_Assets {
 		$preserved = array();
 		$idx = 0;
 		$html = preg_replace_callback( '#<(pre|textarea|script|style)[^>]*>.*?</\1>#is', function( $m ) use ( &$preserved, &$idx ) {
-			$key = '<!--PRESERVED_' . $idx . '-->';
+			// Marcador que NÃO parece comentário HTML: antes era <!--PRESERVED_n--> e a remoção
+			// de comentários logo abaixo apagava todos os <script>/<style>/<pre>/<textarea>.
+			$key = "\x1AMLOPT_PRESERVED_" . $idx . "\x1A";
 			$preserved[ $key ] = $m[0];
 			$idx++;
 			return $key;
@@ -335,6 +349,43 @@ class ML_Optimize_Pro_Assets {
 			$html = str_replace( $key, $value, $html );
 		}
 		return $html;
+	}
+
+	/**
+	 * URL pertence ao tema ativo (pai ou filho)? Esses arquivos nunca são alterados.
+	 *
+	 * @param string $url URL.
+	 * @return bool
+	 */
+	private static function is_theme_asset( $url ) {
+		$path = (string) wp_parse_url( $url, PHP_URL_PATH );
+		foreach ( array( get_stylesheet_directory_uri(), get_template_directory_uri() ) as $theme_url ) {
+			$theme_path = (string) wp_parse_url( $theme_url, PHP_URL_PATH );
+			if ( '' !== $theme_path && 0 === strpos( $path, trailingslashit( $theme_path ) ) ) {
+				return true;
+			}
+		}
+		return false !== strpos( $path, '/wp-content/themes/' );
+	}
+
+	/**
+	 * Garante o arquivo combinado no disco, com conteúdo. Falso = não combinar (nada é removido).
+	 *
+	 * @param string $file Caminho do arquivo.
+	 * @param array  $urls URLs de origem.
+	 * @param string $type css|js.
+	 * @return bool
+	 */
+	private static function ensure_combined_file( $file, $urls, $type ) {
+		if ( file_exists( $file ) && filesize( $file ) > 0 ) {
+			return true;
+		}
+		$body = self::fetch_and_combine( $urls, $type );
+		if ( ! is_string( $body ) || '' === trim( $body ) ) {
+			return false;
+		}
+		@wp_mkdir_p( dirname( $file ) );
+		return false !== @file_put_contents( $file, $body ) && filesize( $file ) > 0;
 	}
 
 	/**

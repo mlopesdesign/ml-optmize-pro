@@ -3,7 +3,7 @@
  * Plugin Name:       ML Optimize Pro
  * Plugin URI:        https://mlopesdesign.com.br/plugins/ml-optmize-pro
  * Description:       Suite premium de otimizacao WordPress: cache de pagina, minify CSS/JS, defer/delay JavaScript, remove unused CSS, lazy load, lazy render, self-host Google Fonts, preload de recursos, Script Manager estilo Perfmatters, Bloat Remover, limpeza de banco, controle de heartbeat, CDN, Speculation Rules e Performance Hub com score CWV.
- * Version:           1.1.1
+ * Version:           1.1.2
  * Requires at least: 6.0
  * Requires PHP:      7.4
  * Tested up to:      6.8
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'ML_OPTIMIZE_PRO_VERSION',  '1.1.1' );
+define( 'ML_OPTIMIZE_PRO_VERSION',  '1.1.2' );
 define( 'ML_OPTIMIZE_PRO_FILE',     __FILE__ );
 define( 'ML_OPTIMIZE_PRO_PATH',     plugin_dir_path( __FILE__ ) );
 define( 'ML_OPTIMIZE_PRO_URL',      plugin_dir_url( __FILE__ ) );
@@ -92,6 +92,20 @@ add_action(
 	static function () {
 		if ( class_exists( 'ML_Optimize_Pro_Activator' ) ) {
 			ML_Optimize_Pro_Activator::maybe_heal_mu_loader();
+		}
+		// 1.1.2: páginas em cache e CSS/JS combinados gerados pelas versões anteriores podem estar
+		// sem os arquivos do tema. Apaga esse cache uma única vez para que tudo seja gerado de novo.
+		if ( '1.1.2' !== get_option( 'ml_optimize_pro_assets_reset' ) && class_exists( 'ML_Optimize_Pro_Cache' ) ) {
+			ML_Optimize_Pro_Cache::purge_all();
+			foreach ( array( 'css', 'js' ) as $sub ) {
+				$dir = ML_OPTIMIZE_PRO_CACHE_DIR . $sub . '/';
+				foreach ( (array) glob( $dir . '*.' . $sub ) as $file ) {
+					if ( is_file( $file ) ) {
+						@unlink( $file );
+					}
+				}
+			}
+			update_option( 'ml_optimize_pro_assets_reset', '1.1.2', true );
 		}
 	},
 	1
